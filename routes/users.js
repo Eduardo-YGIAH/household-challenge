@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const Household = require('../models/Household');
+const auth_controller = require('../controllers/authController');
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get('/', auth_controller.getTestController);
 
 router.post('/test', async (req, res) => {
   console.log(req.body);
