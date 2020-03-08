@@ -1,22 +1,27 @@
-var express = require('express');
-var router = express.Router();
-const Household = require('../models/Household');
-const auth_controller = require('../controllers/authController');
+const express = require('express');
+const router = express.Router();
+const auth = require('../config/middleware/auth');
+const user_controller = require('../controllers/userController');
 
-/* GET users listing. */
-router.get('/', auth_controller.getTestController);
+//signup
+router.post('/users', user_controller.signUp);
 
-router.post('/test', async (req, res) => {
-  console.log(req.body);
-  const household = new Household(req.body);
-  household
-    .save()
-    .then(() => {
-      res.send(household);
-    })
-    .catch(e => {
-      res.status(400).send(e);
-    });
-});
+//login
+router.post('/users/login', user_controller.login);
+
+//logout from current device
+router.post('/users/logout', auth, user_controller.logout);
+
+//logout from all devices
+router.post('/users/logoutAll', auth, user_controller.logoutAll);
+
+//get user profile
+router.get('/users/me', auth, user_controller.profile);
+
+//update user info
+router.patch('/users/me', auth, user_controller.update_info);
+
+//delete user
+router.delete('/users/me', auth, user_controller.delete_user);
 
 module.exports = router;

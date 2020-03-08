@@ -1,5 +1,5 @@
 require('dotenv').config();
-var express = require('express');
+const express = require('express');
 // var path = require('path');
 const connection = require('./config/db/dbConnection');
 
@@ -15,7 +15,9 @@ connection.once('open', () => {
 });
 
 // routes
-var usersRouter = require('./routes/users');
-app.use('/users/api', usersRouter);
+const usersRouter = require('./routes/users');
+const householdRouter = require('./routes/household');
+app.use('/api', usersRouter);
+app.use('/api', householdRouter);
 
 module.exports = app;

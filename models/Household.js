@@ -1,10 +1,24 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
-var householdSchema = new Schema({
-  title: String,
-  author: String,
-  date: { type: Date, default: Date.now },
-});
+var householdSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+    },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
 
-module.exports = Household = mongoose.model('Household', householdSchema);
+const Household = mongoose.model('Household', householdSchema);
+
+module.exports = Household;
