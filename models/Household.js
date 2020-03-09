@@ -13,6 +13,10 @@ var householdSchema = new mongoose.Schema(
       required: true,
       ref: 'User',
     },
+    challenge: {
+      type: [challengeSchema],
+      default: undefined,
+    },
   },
   {
     timestamps: true,
