@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.scss';
-import Main from './components/Main';
+import Body from './components/Body';
 
 function App() {
   return (
     <div className='background'>
-      <Main />
+      <Body />
     </div>
   );
 }

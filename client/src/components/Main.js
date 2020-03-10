@@ -1,21 +1,32 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import './Main.scss';
-import Nav from './Nav';
-import Button from '../components/Button';
+import Button from './Button';
 
 export default function Main() {
-  const btnData = {
+  const btnRegister = {
     label: 'Sign Up',
     link: '#',
     style: '',
   };
+  const btnLogin = {
+    label: 'Login',
+    link: '#',
+    style: 'secondary',
+  };
   return (
     <div className='main-container'>
-      <Router>
-        <Nav />
-        <Button btn={btnData} />
-      </Router>
+      <h1 className='landing-heading'>
+        Welcome
+        <br />
+        to the
+        <br />
+        Household Challenge
+      </h1>
+      <div className='landing-callToAction'>
+        <Button btn={btnRegister} />
+        <div className='landing-btn-spacer'></div>
+        <Button btn={btnLogin} />
+      </div>
     </div>
   );
 }
