@@ -1,18 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import './App.scss';
-import Button from './components/Button';
+import Main from './components/Main';
 
 function App() {
-  const btnData = {
-    label: 'Sign Up',
-    link: '#',
-    style: '',
-  };
   return (
-    <Router>
-      <Button btn={btnData} />
-    </Router>
+    <div className='background'>
+      <Main />
+    </div>
   );
 }
 
