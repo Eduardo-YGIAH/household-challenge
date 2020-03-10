@@ -5,12 +5,12 @@ import Button from './Button';
 export default function Main() {
   const btnRegister = {
     label: 'Sign Up',
-    link: '#',
+    link: '/register',
     style: '',
   };
   const btnLogin = {
     label: 'Login',
-    link: '#',
+    link: '/login',
     style: 'secondary',
   };
   return (

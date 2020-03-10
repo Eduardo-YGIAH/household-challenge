@@ -1,11 +1,14 @@
 import React from 'react';
 import './App.scss';
 import Body from './components/Body';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   return (
     <div className='background'>
-      <Body />
+      <Router>
+        <Body />
+      </Router>
     </div>
   );
 }
