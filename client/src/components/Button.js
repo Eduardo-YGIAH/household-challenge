@@ -32,6 +32,7 @@ export default function Button({ btn }) {
   );
 }
 
+//STYLES
 //small-danger - 'btn btn-danger btn-small'
 //danger - 'btn btn-danger'
 //large-danger - "btn btn-large btn-danger"
@@ -43,3 +44,25 @@ export default function Button({ btn }) {
 //small - "btn btn-small"
 //large - "btn btn-large"
 //default - "btn"
+
+//How to use the buton component:
+
+//import React from 'react';
+//import { BrowserRouter as Router } from 'react-router-dom';
+//import './App.scss';
+//import Button from './components/Button';
+
+//function App() {
+//  const btnData = {
+//   label: 'Clear',
+//    link: '#',
+//    style: 'small-danger',
+//  };
+//  return (
+//    <Router>
+//      <Button btn={btnData} />
+//    </Router>
+//  );
+//}
+
+//export default App;
