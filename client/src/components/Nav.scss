@@ -14,3 +14,33 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.logo {
+  height: 100%;
+}
+
+.logo-img {
+  height: 100%;
+  width: 64px;
+}
+
+.nav-link a {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.nav-link {
+  height: 100%;
+  padding: 0 6px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-link:focus,
+.nav-link:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}

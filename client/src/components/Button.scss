@@ -12,7 +12,7 @@
   font-weight: bold;
   cursor: pointer;
   transform: scale(1, 1);
-  animation: transform 0.3s ease-in-out;
+  animation: transform 0.6s ease-in-out;
 }
 
 .btn-secondary {
@@ -40,7 +40,7 @@
 }
 
 .btn:hover {
-  transform: scale(1.2, 1.2);
+  transform: scale(1.1, 1.1);
 }
 
 .disabled {
