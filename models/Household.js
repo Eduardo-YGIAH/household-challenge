@@ -1,6 +1,8 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const challengeSchema = require('./Challenge')
+const Schema = mongoose.Schema;
 
-var householdSchema = new mongoose.Schema(
+let householdSchema = new Schema(
   {
     title: {
       type: String,
@@ -9,14 +11,16 @@ var householdSchema = new mongoose.Schema(
       unique: true,
     },
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Types.ObjectId,
       required: true,
       ref: 'User',
     },
-    challenge: {
-      type: [challengeSchema],
-      default: undefined,
-    },
+    challenges: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Challenge'
+      }
+    ],
   },
   {
     timestamps: true,

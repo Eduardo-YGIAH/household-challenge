@@ -1,24 +1,28 @@
 const User = require('../models/User');
 
 exports.signUp = async (req, res) => {
-  const user = new User(req.body);
-
+  
   try {
+    const user = new User(req.body);
     await user.save();
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
-  } catch (e) {
-    res.status(400).send(e);
+  } catch (error) {
+    res.status(400).send(error);
   }
 };
 
 exports.login = async (req, res) => {
   try {
-    const user = await User.findByCredentials(req.body.email, req.body.password);
+    const { email, password } = req.body;
+    const user = await User.findByCredentials(email, password);
+    if (!user) {
+      return res.status(401).send({error: 'Login failed! Check authentication credentials'})
+    }
     const token = await user.generateAuthToken();
     res.send({ user, token });
-  } catch (e) {
-    res.status(400).send();
+  } catch (error) {
+    res.status(400).send(error);
   }
 };
 
@@ -28,10 +32,10 @@ exports.logout = async (req, res) => {
       return token.token !== req.token;
     });
     await req.user.save();
-
     res.send();
-  } catch (e) {
-    res.status(500).send();
+
+  } catch (error) {
+    res.status(500).send(error);
   }
 };
 
@@ -40,8 +44,8 @@ exports.logoutAll = async (req, res) => {
     req.user.tokens = [];
     await req.user.save();
     res.send();
-  } catch (e) {
-    res.status(500).send();
+  } catch (error) {
+    res.status(500).send(error);
   }
 };
 
@@ -62,8 +66,8 @@ exports.update_info = async (req, res) => {
     updates.forEach(update => (req.user[update] = req.body[update]));
     await req.user.save();
     res.send(req.user);
-  } catch (e) {
-    res.status(400).send(e);
+  } catch (error) {
+    res.status(400).send(error);
   }
 };
 
@@ -71,7 +75,7 @@ exports.delete_user = async (req, res) => {
   try {
     await req.user.remove();
     res.send(req.user);
-  } catch (e) {
+  } catch (error) {
     res.status(500).send();
   }
 };

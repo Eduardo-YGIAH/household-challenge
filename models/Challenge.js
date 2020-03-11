@@ -1,11 +1,9 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const taskSchema = require('./Tasks')
+const Schema = mongoose.Schema;
 
-var challengedSchema = new mongoose.Schema(
+let challengeSchema = new Schema(
   {
-    task: {
-      type: [taskSchema],
-      default: undefined,
-    },
     startDate: {
       type: Date,
       default: undefined,
@@ -14,6 +12,17 @@ var challengedSchema = new mongoose.Schema(
       type: Date,
       default: undefined,
     },
+    householdId: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+      ref: 'Household'
+    },
+    tasks: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Task'
+      }
+    ],
   },
   {
     timestamps: true,
