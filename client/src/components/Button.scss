@@ -1,0 +1,61 @@
+@import '../variables.scss';
+.btn {
+  box-sizing: border-box;
+  padding: 7px 20px;
+  background-color: $primary-color;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 3px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  transform: scale(1, 1);
+  animation: transform 0.6s ease-in-out;
+}
+
+.btn-secondary {
+  background-color: #ffffff;
+  color: $primary-color;
+  border: 1px solid $primary-color;
+}
+
+.btn-danger {
+  background-color: red;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+.btn-small {
+  padding: 3px 10px;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.btn-large {
+  width: 100%;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+.btn:hover {
+  transform: scale(1.1, 1.1);
+}
+
+.disabled {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+button:disabled,
+button[disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
