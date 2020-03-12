@@ -6,6 +6,7 @@ import Main from './Main';
 import About from './About';
 import Login from './Login';
 import Register from './Register';
+import Welcome from './Welcome';
 
 export default function Body() {
   return (
@@ -16,6 +17,7 @@ export default function Body() {
         <Route exact path='/about' render={() => <About />} />
         <Route exact path='/register' render={() => <Register />} />
         <Route exact path='/login' render={() => <Login />} />
+        <Route exact path='/welcome' render={() => <Welcome />} />
       </Switch>
     </div>
   );

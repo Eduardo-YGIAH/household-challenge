@@ -3,6 +3,8 @@ import './Register.scss';
 import useFormValidation from '../customHooks/useSignUpForm';
 import validateAuth from '../helperFunctions/validateAuth';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { UserContext } from '../App';
 
 const INITIAL_STATE = {
   firstName: '',
@@ -13,10 +15,34 @@ const INITIAL_STATE = {
 };
 
 export default function Register() {
+  const [user, setUser] = React.useContext(UserContext);
   const signup = () => {
-    alert(`User Created!
-        Name: ${values.firstName} ${values.lastName}
-        Email: ${values.email}`);
+    const payload = {
+      name: `${values.firstName} ${values.lastName}`,
+      email: values.email,
+      password: values.password,
+    };
+    axios
+      .post('/api/users', payload)
+      .then(function(response) {
+        console.log(response.data.user, response.data.token);
+        const { user, token } = response.data;
+        const isReturningUser = '_HC_user' in localStorage;
+        if (!isReturningUser) {
+          localStorage.setItem('_HC_user', JSON.stringify(user));
+          localStorage.setItem('_HC_token', JSON.stringify(token));
+        } else {
+          localStorage.removeItem('_HC_user');
+          localStorage.removeItem('_HC_token');
+          localStorage.setItem('_HC_user', JSON.stringify(user));
+          localStorage.setItem('_HC_token', JSON.stringify(token));
+        }
+        setUser(user);
+        Link('/welcome');
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   };
 
   const { handleSubmit, handleChange, handleBlur, values, errors, isSubmitting } = useFormValidation(
