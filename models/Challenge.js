@@ -1,27 +1,25 @@
 const mongoose = require('mongoose');
-const taskSchema = require('./Tasks')
+// const taskSchema = require('./Tasks');
 const Schema = mongoose.Schema;
 
 let challengeSchema = new Schema(
   {
     startDate: {
       type: Date,
-      default: undefined,
     },
     endDate: {
       type: Date,
-      default: undefined,
     },
     householdId: {
       type: mongoose.Types.ObjectId,
       required: true,
-      ref: 'Household'
+      ref: 'Household',
     },
     tasks: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Task'
-      }
+        ref: 'Task',
+      },
     ],
   },
   {
