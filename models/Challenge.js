@@ -10,12 +10,11 @@ let challengeSchema = new Schema(
     },
     endDate: {
       type: Date,
-      default: undefined,
     },
     householdId: {
       type: mongoose.Types.ObjectId,
       required: true,
-      ref: 'Household'
+      ref: 'Household',
     },
     tasks: [taskSchema]
   },

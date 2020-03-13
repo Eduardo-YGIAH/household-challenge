@@ -1,6 +1,6 @@
 import React from 'react';
 import './Button.scss';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 
 export default function Button({ btn }) {
   const style = () => {
@@ -25,11 +25,19 @@ export default function Button({ btn }) {
         return 'btn';
     }
   };
-  return (
-    <Link to={btn.link}>
-      <button className={style()}>{btn.label}</button>
-    </Link>
-  );
+  if (btn.link) {
+    return (
+      <Link to={btn.link}>
+        <button className={style()}>{btn.label}</button>
+      </Link>
+    );
+  } else {
+    return (
+      <button onClick={btn.onclick} className={style()}>
+        {btn.label}
+      </button>
+    );
+  }
 }
 
 //STYLES

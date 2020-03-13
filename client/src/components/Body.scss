@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 800px;
 }
 
 /* Extra small devices (phones, 600px and down) */
@@ -14,6 +15,7 @@
   .body-container {
     width: 100vw;
     height: 100vh;
+    min-height: 600px;
   }
 }
 
@@ -30,7 +32,6 @@
   .body-container {
     width: 80vw;
     max-width: 480px;
-    min-height: 400px;
   }
 }
 

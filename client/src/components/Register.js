@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Register.scss';
 import useFormValidation from '../customHooks/useSignUpForm';
 import validateAuth from '../helperFunctions/validateAuth';
-import { Link } from 'react-router-dom';
+import { navigate, Link } from '@reach/router';
+import axios from 'axios';
+import * as auth from '../helperFunctions/auth';
+import { UserContext } from '../App';
 
 const INITIAL_STATE = {
   firstName: '',
@@ -13,10 +16,43 @@ const INITIAL_STATE = {
 };
 
 export default function Register() {
+  const { user, setUser } = useContext(UserContext);
+
+  React.useEffect(() => {
+    if (!user.isAuthenticated && auth.isAuthenticated()) {
+      const persistUser = auth.isAuthenticated();
+      setUser(persistUser);
+    }
+    if (user.isAuthenticated) {
+      navigate('/welcome');
+    }
+    console.log(user);
+  });
+
   const signup = () => {
-    alert(`User Created!
-        Name: ${values.firstName} ${values.lastName}
-        Email: ${values.email}`);
+    const payload = {
+      name: `${values.firstName} ${values.lastName}`,
+      email: values.email,
+      password: values.password,
+    };
+    axios
+      .post('/api/users', payload)
+      .then(function(response) {
+        console.log(response.data);
+        if (response.status === 201) {
+          const userObj = {
+            isAuthenticated: true,
+            name: response.data.user.name,
+            email: response.data.user.email,
+            token: response.data.token,
+          };
+          auth.updateUserStateAndStorage(setUser, userObj);
+        }
+        user.isAuthenticated ? navigate('/welcome') : navigate('/login');
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   };
 
   const { handleSubmit, handleChange, handleBlur, values, errors, isSubmitting } = useFormValidation(
