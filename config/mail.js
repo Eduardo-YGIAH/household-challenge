@@ -7,17 +7,18 @@ const mailGun = require('nodemailer-mailgun-transport');
 const auth = {
   auth: {
     api_key: process.env.MAILGUN_API_KEY,
-    domain: process.env.MAILGUN_DOMAIN
+    domain: process.env.MAILGUN_DOMAIN,
   },
 };
 
 const transporter = nodemailer.createTransport(mailGun(auth));
 
-const sendMail = (email, text, cb) => {      //(email, subject, text, cb)
+const sendMail = (email, text, cb) => {
+  //(email, subject, text, cb)
   const mailOptions = {
     from: email,
     to: process.env.MY_EMAIL,
-    subject: '** Household invitation request **',
+    subject: 'edu.neto@icloud.com',
     text,
   };
 
