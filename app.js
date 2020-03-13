@@ -19,10 +19,12 @@ const usersRouter = require('./routes/users');
 const householdRouter = require('./routes/household');
 const challengeRouter = require('./routes/challenge');
 const taskRouter = require('./routes/task');
+const inviteRouter = require('./routes/invite');
 
 app.use('/api', usersRouter);
 app.use('/api', householdRouter);
 app.use('/api', challengeRouter);
 app.use('/api', taskRouter);
+app.use('/api', inviteRouter);
 
 module.exports = app;

@@ -1,6 +1,7 @@
-const Challenge = require('../models/Challenge');
+const Challenge = require('../models/Challenge.js');
 
 exports.create_challenge = async (req, res) => {
+
 	try {
 		const challenge = new Challenge({
 			...req.body,
@@ -8,34 +9,35 @@ exports.create_challenge = async (req, res) => {
 		});
 		await challenge.save();
 		res.status(201).send({ challenge });
-	} catch (e) {
-		res.status(400).send(e);
+	} catch (error) {
+		res.status(400).send(error);
 	}
 };
 
 
 exports.get_challenge = async (req, res) => {
-	const _id = req.params.id;
-
+	
 	try {
-		const challenge = await Challenge.findOne({ _id, householdId: req.household._id });
+		const _id = req.params.id;
+		const challenge = await Challenge.findOne(
+			{ _id, 
+				householdId: req.household._id 
+			});
 
 		if (!challenge) {
 			return res.status(404).send();
-		} else {
-			challenge.populate('Task');
 		}
 
     res.send(challenge);
         
-	} catch (e) {
-		res.status(500).send();
+	} catch (error) {
+		res.status(500).send(error);
 	}
 };
 
 exports.all_challenges = async (req, res) => {
 	try {
-		const allChallenges = await Challenge.findAll({});
+		const allChallenges = await Challenge.find({});
 
 		if(!allChallenges) {
 			return res.status(404).send();
