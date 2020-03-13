@@ -1,13 +1,21 @@
 import React, { useContext } from 'react';
-import { Redirect } from '@reach/router';
+import { navigate } from '@reach/router';
 import Button from './Button';
 import { UserContext } from '../App';
+import * as auth from '../helperFunctions/auth';
 
 export default function Welcome() {
-  const { user, logout } = useContext(UserContext);
+  const { user, setUser, logout } = useContext(UserContext);
   React.useEffect(() => {
-    console.log('re-render NAV with useEffect from Welcome', user);
-  }, [user]);
+    if (!user.isAuthenticated && !auth.isAuthenticated()) {
+      navigate('/login');
+    }
+    if (!user.isAuthenticated && auth.isAuthenticated()) {
+      const persistUser = auth.isAuthenticated();
+      setUser(persistUser);
+    }
+    console.log('effect from Welcome', user);
+  });
 
   const btnLogout = {
     label: 'Logout',
@@ -16,9 +24,6 @@ export default function Welcome() {
     onclick: logout,
   };
 
-  if (!user.isAuthenticated) {
-    return <Redirect from='/welcome' to='/login' noThrow />;
-  }
   return (
     <div>
       <h1>What would you like to do {user.name}?</h1>
