@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+
 const { challengeSchema } = require('./Challenge')
+
 const Schema = mongoose.Schema;
 
 let householdSchema = new Schema(
@@ -12,7 +14,6 @@ let householdSchema = new Schema(
     },
     owner: {
       type: mongoose.Types.ObjectId,
-      required: true,
       ref: 'User',
     },
     challenges: [challengeSchema]

@@ -1,7 +1,9 @@
 const User = require('../models/User');
+const cloudinary = require('cloudinary');
+require('../config/cloudinary_config');
+const upload = require('../config/multer_config');
 
 exports.signUp = async (req, res) => {
-  
   try {
     const user = new User(req.body);
     await user.save();
@@ -17,7 +19,7 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findByCredentials(email, password);
     if (!user) {
-      return res.status(401).send({error: 'Login failed! Check authentication credentials'})
+      return res.status(401).send({ error: 'Login failed! Check authentication credentials' });
     }
     const token = await user.generateAuthToken();
     res.send({ user, token });
@@ -33,7 +35,6 @@ exports.logout = async (req, res) => {
     });
     await req.user.save();
     res.send();
-
   } catch (error) {
     res.status(500).send(error);
   }
@@ -70,6 +71,26 @@ exports.update_info = async (req, res) => {
     res.status(400).send(error);
   }
 };
+
+(exports.upload_avatar = upload.single('image')),
+  async (req, res) => {
+    const result = await cloudinary.v2.uploader.upload(req.file.path);
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ['avatar'];
+    const isValidOperation = updates.every(update => allowedUpdates.includes(update));
+
+    if (!isValidOperation) {
+      return res.status(400).send({ error: 'Invalid upload!' });
+    }
+
+    try {
+      updates.forEach(update => (req.user[update] = result.secure_url));
+      await req.user.save();
+      res.send(req.user);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  };
 
 exports.delete_user = async (req, res) => {
   try {

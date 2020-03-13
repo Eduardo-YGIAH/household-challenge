@@ -1,7 +1,6 @@
 const Household = require('../models/Household.js');
 
 exports.create_household = async (req, res) => {
-  
   try {
     const household = new Household({
       ...req.body,
@@ -16,7 +15,6 @@ exports.create_household = async (req, res) => {
 };
 
 exports.get_household = async (req, res) => {
-
   try {
     const _id = req.params.id;
     const household = await Household.findOne({ _id, owner: req.user._id });
@@ -24,8 +22,8 @@ exports.get_household = async (req, res) => {
     if (!household) {
       return res.status(404).send();
     }
-    res.send(household);
 
+    res.send(household);
   } catch (error) {
     res.status(500).send(error);
   }
