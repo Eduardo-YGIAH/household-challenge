@@ -1,26 +1,30 @@
 import React from 'react';
 import './App.scss';
 import Body from './components/Body';
-import { BrowserRouter as Router } from 'react-router-dom';
+import * as auth from './helperFunctions/auth';
 
-export const UserContext = React.createContext([]);
+export const UserContext = React.createContext({ user: {}, setUser: () => {}, logout: () => {} });
 
 function App() {
-  const [user, setUser] = React.useState({});
-  const [loading, setLoading] = React.useState(true);
+  const initialState = {
+    isAuthenticated: false,
+    name: null,
+    email: null,
+    token: null,
+  };
 
-  const logOutCallback = async () => {};
+  const [user, setUser] = React.useState(initialState);
 
-  React.useEffect(() => {}, []);
-
+  function onLogout() {
+    auth.logout(); // FROM AUTH HELPERS
+    setUser(initialState);
+  }
   return (
-    <UserContext.Provider value={[user, setUser]}>
-      <div className='background'>
-        <Router id='router'>
-          <Body />
-        </Router>
-      </div>
-    </UserContext.Provider>
+    <div className='background'>
+      <UserContext.Provider value={{ user, setUser, logout: onLogout }}>
+        <Body value={{ user, setUser, logout: onLogout }} />
+      </UserContext.Provider>
+    </div>
   );
 }
 

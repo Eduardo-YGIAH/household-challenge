@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Login.scss';
 import useLoginForm from '../customHooks/useLoginForm';
-import { Link } from 'react-router-dom';
-import { UserContext } from '../App';
+import { Link, navigate } from '@reach/router';
 import Welcome from './Welcome';
+import { UserContext } from '../App';
+import * as auth from '../helperFunctions/auth';
 
 export default function Login() {
-  const [user, setUser] = React.useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+
   const login = async () => {
     console.log('Got here');
 
@@ -23,27 +25,20 @@ export default function Login() {
         }),
       })
     ).json();
-    console.log(result);
+    console.log(result.token);
     if (result.token) {
-      setUser({
+      const userObj = {
+        isAuthenticated: true,
         name: result.user.name,
         email: result.user.email,
-      });
-      const isReturningUser = '_HC_user' in localStorage;
-      if (isReturningUser) {
-        localStorage.removeItem('_HC_user');
-      }
-      const localUser = localStorage.setItem('_HC_user', JSON.stringify(user));
-      console.log('Saved now to Local storage:' + localUser);
+        token: result.token,
+      };
+      auth.updateUserStateAndStorage(setUser, userObj);
+      navigate('/welcome');
     } else {
       console.log(result.error);
     }
   };
-
-  React.useEffect(() => {
-    const savedUserData = JSON.parse(localStorage.getItem('_HC_user'));
-    console.log('User from UseContext:' + user, 'Got from LocalStorage:' + savedUserData);
-  }, [user]);
 
   const INITIAL_STATE = {
     email: '',
@@ -51,7 +46,8 @@ export default function Login() {
   };
 
   const { inputs, handleInputChange, handleSubmit } = useLoginForm(INITIAL_STATE, login);
-  if (user) {
+
+  if (user.isAuthenticated) {
     return <Welcome />;
   } else {
     return (
