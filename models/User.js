@@ -12,6 +12,9 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    avatar: {
+      type: String,
+    },
     email: {
       type: String,
       unique: true,
@@ -22,7 +25,7 @@ const userSchema = new mongoose.Schema(
         if (!validator.isEmail(value)) {
           throw new Error('Email is invalid');
         }
-      }
+      },
     },
     password: {
       type: String,
@@ -33,14 +36,16 @@ const userSchema = new mongoose.Schema(
         if (value.toLowerCase().includes('password')) {
           throw new Error('Password cannot contain "password"');
         }
-      }
+      },
     },
-    tokens: [{
+    tokens: [
+      {
         token: {
           type: String,
           required: true,
-        }
-      }]
+        },
+      },
+    ],
   },
   {
     timestamps: true,
