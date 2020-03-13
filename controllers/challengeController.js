@@ -3,6 +3,9 @@ const Challenge = require('../models/Challenge.js');
 exports.create_challenge = async (req, res) => {
 
 	try {
+		
+		console.log(req.household._id);
+
 		const challenge = new Challenge({
 			...req.body,
 			householdId: req.household._id

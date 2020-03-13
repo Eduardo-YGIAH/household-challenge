@@ -6,14 +6,15 @@ let challengeSchema = new Schema(
   {
     startDate: {
       type: Date, 
-      default: undefined,
+      default: Date.now
     },
     endDate: {
       type: Date,
+      default: Date.now
     },
     householdId: {
       type: mongoose.Types.ObjectId,
-      required: true,
+      // required: true,
       ref: 'Household',
     },
     tasks: [taskSchema]

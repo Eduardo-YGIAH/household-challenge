@@ -13,11 +13,11 @@ const auth = {
 
 const transporter = nodemailer.createTransport(mailGun(auth));
 
-const sendMail = (email, text, cb) => {      //(email, subject, text, cb)
+const sendMail = (email, subject, text, cb) => {      //(email, subject, text, cb)
   const mailOptions = {
     from: email,
     to: process.env.MY_EMAIL,
-    subject: '** Household invitation request **',
+    subject,
     text,
   };
 
@@ -27,7 +27,7 @@ const sendMail = (email, text, cb) => {      //(email, subject, text, cb)
       return cb(err, null);
     } else {
       return cb(null, data);
-      console.log('Invitation sent!!');
+      // console.log('Invitation sent!!');
     }
   });
 };
