@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
-// const taskSchema = require('./Tasks');
+const { taskSchema } = require('./Tasks')
 const Schema = mongoose.Schema;
 
 let challengeSchema = new Schema(
   {
     startDate: {
-      type: Date,
+      type: Date, 
+      default: undefined,
     },
     endDate: {
       type: Date,
@@ -15,12 +16,7 @@ let challengeSchema = new Schema(
       required: true,
       ref: 'Household',
     },
-    tasks: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Task',
-      },
-    ],
+    tasks: [taskSchema]
   },
   {
     timestamps: true,
@@ -29,4 +25,7 @@ let challengeSchema = new Schema(
 
 const Challenge = mongoose.model('Challenge', challengeSchema);
 
-module.exports = Challenge;
+module.exports = {
+  Challenge,
+  challengeSchema
+}

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const challengeSchema = require('./Challenge');
+
+const { challengeSchema } = require('./Challenge')
+
 const Schema = mongoose.Schema;
 
 let householdSchema = new Schema(
@@ -14,12 +16,7 @@ let householdSchema = new Schema(
       type: mongoose.Types.ObjectId,
       ref: 'User',
     },
-    challenges: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Challenge',
-      },
-    ],
+    challenges: [challengeSchema]
   },
   {
     timestamps: true,

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = new express.Router();
-const Challenge = require('../models/Challenge');
+// const Challenge = require('../models/Challenge');
 const challenge_controller = require('../controllers/challengeController');
 const auth = require('../config/middleware/auth');
 
