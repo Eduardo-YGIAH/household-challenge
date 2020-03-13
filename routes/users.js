@@ -21,6 +21,9 @@ router.get('/users/me', auth, user_controller.profile);
 //update user info
 router.patch('/users/me', auth, user_controller.update_info);
 
+//update user avatar
+router.patch('/users/me/avatar', auth, user_controller.upload_avatar);
+
 //delete user
 router.delete('/users/me', auth, user_controller.delete_user);
 
