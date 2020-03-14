@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { Link } from '@reach/router';
 import './Nav.scss';
-import { UserContext } from '../App';
+import { UserContext } from '../context/UserContext';
 
 export default function Nav() {
   const { user } = useContext(UserContext);
   React.useEffect(() => {
-    console.log('re-render NAV with useEffect', user);
+    return;
   }, [user]);
 
   if (user.isAuthenticated) {

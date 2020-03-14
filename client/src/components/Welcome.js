@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { navigate } from '@reach/router';
 import Button from './Button';
-import { UserContext } from '../App';
+import { UserContext } from '../context/UserContext';
 import * as auth from '../helperFunctions/auth';
 import './Welcome.scss';
 
@@ -15,7 +15,6 @@ export default function Welcome() {
       const persistUser = auth.isAuthenticated();
       setUser(persistUser);
     }
-    console.log('effect from Welcome', user);
   });
 
   const btnLogout = {

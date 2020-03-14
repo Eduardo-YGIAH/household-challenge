@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import * as auth from '../helperFunctions/auth';
-import { UserContext } from '../App';
+import { UserContext } from '../context/UserContext';
 import { navigate } from '@reach/router';
 import './Profile.scss';
 
@@ -15,7 +15,6 @@ export default function Profile() {
       const persistUser = auth.isAuthenticated();
       setUser(persistUser);
     }
-    console.log('effect from Profile', user);
   });
 
   return (

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import './Login.scss';
 import useLoginForm from '../customHooks/useLoginForm';
 import { Link, navigate } from '@reach/router';
-import { UserContext } from '../App';
+import { UserContext } from '../context/UserContext';
 import * as auth from '../helperFunctions/auth';
 
 export default function Login() {
@@ -16,7 +16,6 @@ export default function Login() {
     if (user.isAuthenticated) {
       navigate('/welcome');
     }
-    console.log(user);
   });
 
   const login = async () => {
@@ -35,7 +34,6 @@ export default function Login() {
         }),
       })
     ).json();
-    console.log(result.token);
     if (result.token) {
       const userObj = {
         isAuthenticated: true,

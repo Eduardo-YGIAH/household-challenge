@@ -1,7 +1,7 @@
 import React from 'react';
 import './Main.scss';
 import Button from './Button';
-import { UserContext } from '../App';
+import { UserContext } from '../context/UserContext';
 import * as auth from '../helperFunctions/auth';
 
 export default function Main() {
@@ -15,9 +15,8 @@ export default function Main() {
       const persistUser = auth.isAuthenticated();
       setUser(persistUser);
     }
-    console.log(user);
   });
-  console.log('From Register', user);
+
   const btnRegister = {
     label: 'Sign Up',
     link: '/register',

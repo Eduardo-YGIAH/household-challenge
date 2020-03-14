@@ -1,29 +1,34 @@
 import React from 'react';
 import './App.scss';
 import Body from './components/Body';
-import * as auth from './helperFunctions/auth';
+import { UserContextProvider } from './context/UserContext';
+// import * as auth from './helperFunctions/auth';
 
-export const UserContext = React.createContext({ user: {}, setUser: () => {}, logout: () => {} });
+// export const UserContext = React.createContext({ user: {}, setUser: () => {}, logout: () => {} });
 
 function App() {
-  const initialState = {
-    isAuthenticated: false,
-    name: null,
-    email: null,
-    token: null,
-  };
+  // const { user, setUser } = useContext(UserContext);
+  // const initialState = {
+  //   isAuthenticated: false,
+  //   name: null,
+  //   email: null,
+  //   token: null,
+  // };
 
-  const [user, setUser] = React.useState(initialState);
+  // const [user, setUser] = React.useState(initialState);
 
-  function onLogout() {
-    auth.logout(); // FROM AUTH HELPERS
-    setUser(initialState);
-  }
+  // function onLogout() {
+  //   auth.logout(); // FROM AUTH HELPERS
+  //   setUser(initialState);
+  // }
+  // value={{ user, setUser, logout: onLogout }}
   return (
     <div className='background'>
-      <UserContext.Provider value={{ user, setUser, logout: onLogout }}>
-        <Body value={{ user, setUser, logout: onLogout }} />
-      </UserContext.Provider>
+      {/* <UserContext.Provider value={{ user, setUser, logout: onLogout }}> */}
+      <UserContextProvider>
+        <Body />
+      </UserContextProvider>
+      {/* </UserContext.Provider> */}
     </div>
   );
 }

@@ -5,7 +5,7 @@ import validateAuth from '../helperFunctions/validateAuth';
 import { navigate, Link } from '@reach/router';
 import axios from 'axios';
 import * as auth from '../helperFunctions/auth';
-import { UserContext } from '../App';
+import { UserContext } from '../context/UserContext';
 
 const INITIAL_STATE = {
   firstName: '',
@@ -26,7 +26,6 @@ export default function Register() {
     if (user.isAuthenticated) {
       navigate('/welcome');
     }
-    console.log(user);
   });
 
   const signup = () => {

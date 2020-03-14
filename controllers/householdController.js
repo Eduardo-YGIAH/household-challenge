@@ -8,7 +8,6 @@ exports.create_household = async (req, res) => {
     });
     await household.save();
     res.status(201).send({ household });
-    console.log(req.users.email)
   } catch (error) {
     res.status(400).send(error);
   }

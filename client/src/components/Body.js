@@ -9,26 +9,25 @@ import Register from './Register';
 import Welcome from './Welcome';
 import Profile from './Profile';
 import CreateHousehold from './CreateHousehold';
-import { UserContext } from '../App';
+import Members from './Members';
 import { HouseholdContextProvider } from '../context/HouseholdContext';
 
-export default function Body({ value }) {
+export default function Body() {
   return (
     <div className='body-container'>
       <Nav />
-      <UserContext.Provider value={value}>
-        <HouseholdContextProvider>
-          <Router>
-            <Main path='/' />
-            <About path='/about' />
-            <Register path='/register' />
-            <Login path='/login' />
-            <Welcome path='/welcome' />
-            <Profile path='/profile' />
-            <CreateHousehold path='/create-household' />
-          </Router>
-        </HouseholdContextProvider>
-      </UserContext.Provider>
+      <HouseholdContextProvider>
+        <Router>
+          <Main path='/' />
+          <About path='/about' />
+          <Register path='/register' />
+          <Login path='/login' />
+          <Welcome path='/welcome' />
+          <Profile path='/profile' />
+          <CreateHousehold path='/create-household' />
+          <Members path='/members' />
+        </Router>
+      </HouseholdContextProvider>
     </div>
   );
 }
