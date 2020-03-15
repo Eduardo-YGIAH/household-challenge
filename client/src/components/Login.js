@@ -37,9 +37,11 @@ export default function Login() {
     if (result.token) {
       const userObj = {
         isAuthenticated: true,
+        _id: result.user._id,
         name: result.user.name,
         email: result.user.email,
         token: result.token,
+        avatar: result.user.avatar || '',
       };
       auth.updateUserStateAndStorage(setUser, userObj);
       navigate('/welcome');
