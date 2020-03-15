@@ -3,6 +3,7 @@ import * as auth from '../helperFunctions/auth';
 import { navigate } from '@reach/router';
 import Button from './Button';
 import { UserContext } from '../context/UserContext';
+import DateRangeSelector from './DateRangeSelector';
 
 export default function CreateChallenge() {
   const { user, setUser } = useContext(UserContext);
@@ -33,7 +34,7 @@ export default function CreateChallenge() {
     <div className='container'>
       <h1>Create a Challenge</h1>
       <h3>Set Up the Start and End Date</h3>
-      <div className=''>Date Range Component here</div>
+      <DateRangeSelector />
       <h2 className='sub-heading'>Tasks:</h2>
       <Button btn={btnCreateTask} />
       <Button btn={btnCreateChallenge} />
