@@ -11,7 +11,7 @@ export default function CreateHousehold() {
   const { setHousehold } = useContext(HouseholdContext);
   const { values, handleChange, handleSubmit } = useForm({
     initialValues: {
-      title: '',
+      avatar: '',
     },
     onSubmit(values, errors) {
       if (errors) {

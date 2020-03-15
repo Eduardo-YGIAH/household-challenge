@@ -21,7 +21,11 @@ export default function Nav() {
           <div className='avatar'>
             <Link to='/profile'>
               <img
-                src='https://res.cloudinary.com/ygiah/image/upload/v1579778125/Avatars/image_11.jpg'
+                src={
+                  !user.avatar || user.avatar === ''
+                    ? 'https://res.cloudinary.com/ygiah/image/upload/v1579778125/Avatars/image_11.jpg'
+                    : user.avatar
+                }
                 alt='user avatar'
                 className='avatar-image'
               />

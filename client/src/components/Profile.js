@@ -1,12 +1,49 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import * as auth from '../helperFunctions/auth';
 import { UserContext } from '../context/UserContext';
 import { navigate } from '@reach/router';
+import useFileUploader from '../customHooks/useFileUploader';
+import axios from 'axios';
 import './Profile.scss';
 
 export default function Profile() {
   const { user, setUser } = useContext(UserContext);
-  const [avatar, setAvatar] = useState('');
+  const { inputHandler, submitHandler, imagePreview } = useFileUploader({
+    initialValues: {
+      avatar: '',
+    },
+    onSubmit(values, errors) {
+      if (errors) {
+        console.log(errors);
+      } else {
+        const fd = new FormData();
+        fd.append('avatar', values.values.avatar.file);
+        axios
+          .patch('/api/users/me/avatar', fd, {
+            headers: {
+              'Content-Type': 'form-data',
+              Authorization: `Bearer ${user.token}`,
+            },
+          })
+          .then(res => {
+            if (res.status === 200) {
+              const avatar = res.data.avatar;
+              setUser({ ...user, avatar });
+            } else {
+              console.log(res);
+            }
+          })
+          .catch(console.log);
+      }
+    },
+    validate(values) {
+      const errors = {};
+      if (values.avatar === '') {
+        errors.title = 'Please select a file';
+      }
+      return errors;
+    },
+  });
 
   useEffect(() => {
     if (!auth.isAuthenticated()) {
@@ -16,28 +53,10 @@ export default function Profile() {
       const persistUser = auth.isAuthenticated();
       setUser(persistUser);
     }
-  });
-
-  function generatePreviewImgUrl(file, callback) {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = e => callback(reader.result);
-  }
-
-  function inputHandler(event) {
-    const file = event.target.files[0];
-    if (!file) {
-      return;
+    if (user.isAuthenticated && auth.isAuthenticated()) {
+      localStorage.setItem('userObj', JSON.stringify(user));
     }
-    generatePreviewImgUrl(file, previewImgUrl => {
-      setAvatar({ previewImgUrl });
-    });
-  }
-
-  function submitHandler(event) {
-    event.preventDefault();
-    return;
-  }
+  });
 
   return (
     <div className='container'>
@@ -45,9 +64,11 @@ export default function Profile() {
       <div className='profile'>
         <img
           src={
-            avatar === ''
-              ? 'https://res.cloudinary.com/ygiah/image/upload/v1579778124/Avatars/image_5.jpg'
-              : avatar.previewImgUrl
+            imagePreview.previewImgUrl
+              ? imagePreview.previewImgUrl
+              : user.avatar
+              ? user.avatar
+              : 'https://res.cloudinary.com/ygiah/image/upload/v1579778124/Avatars/image_5.jpg'
           }
           alt='user avatar'
           className='profile-avatar-image'
