@@ -11,6 +11,7 @@ import Profile from './Profile';
 import CreateHousehold from './CreateHousehold';
 import Members from './Members';
 import { HouseholdContextProvider } from '../context/HouseholdContext';
+import CreateChallenge from './CreateChallenge';
 
 export default function Body() {
   return (
@@ -26,6 +27,7 @@ export default function Body() {
           <Profile path='/profile' />
           <CreateHousehold path='/create-household' />
           <Members path='/members' />
+          <CreateChallenge path='/create-challenge' />
         </Router>
       </HouseholdContextProvider>
     </div>

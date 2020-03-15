@@ -64,6 +64,7 @@ export default function Button({ btn }) {
 //  const btnData = {
 //   label: 'Clear',
 //    link: '#',
+//    onclick: ()=>{},
 //    style: 'small-danger',
 //  };
 //  return (
