@@ -1,7 +1,6 @@
 const User = require('../models/User');
-const cloudinary = require('cloudinary');
+const cloudinary = require('cloudinary').v2;
 require('../config/cloudinary_config');
-const upload = require('../config/multer_config');
 
 exports.signUp = async (req, res) => {
   try {
@@ -72,25 +71,25 @@ exports.update_info = async (req, res) => {
   }
 };
 
-(exports.upload_avatar = upload.single('image')),
-  async (req, res) => {
-    const result = await cloudinary.v2.uploader.upload(req.file.path);
-    const updates = Object.keys(req.body);
+exports.upload_avatar = (req, res) => {
+  const file = req.files.avatar;
+  cloudinary.uploader.upload(file.tempFilePath, async function(err, result) {
+    const avatar_url = result.secure_url;
+    const updates = Object.keys(req.files);
     const allowedUpdates = ['avatar'];
     const isValidOperation = updates.every(update => allowedUpdates.includes(update));
-
     if (!isValidOperation) {
       return res.status(400).send({ error: 'Invalid upload!' });
     }
-
     try {
-      updates.forEach(update => (req.user[update] = result.secure_url));
+      updates.forEach(update => (req.user[update] = avatar_url));
       await req.user.save();
       res.send(req.user);
     } catch (error) {
       res.status(400).send(error);
     }
-  };
+  });
+};
 
 exports.delete_user = async (req, res) => {
   try {

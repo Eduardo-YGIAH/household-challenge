@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../config/middleware/auth');
+// const upload = require('../config/multer_config');
 const user_controller = require('../controllers/userController');
 
 //signup
@@ -28,3 +29,4 @@ router.patch('/users/me/avatar', auth, user_controller.upload_avatar);
 router.delete('/users/me', auth, user_controller.delete_user);
 
 module.exports = router;
+// upload.single('image'),
