@@ -10,7 +10,7 @@ let challengeSchema = new Schema(
     },
     endDate: {
       type: Date,
-      default: Date.now
+      default: 'undefined'
     },
     householdId: {
       type: mongoose.Types.ObjectId,

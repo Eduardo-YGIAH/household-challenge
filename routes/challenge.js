@@ -15,7 +15,7 @@ router.get('/challenge/:id', auth, challenge_controller.get_challenge);
 // router.get('/previous-challenges', auth, challenge_controller.all_challenges);
 
 // update challenge
-router.patch('/challenge/:id', auth, challenge_controller.update_challenge);
+router.patch('/update-challenge/:id', auth, challenge_controller.update_challenge);
 
 // delete challenge
 router.delete('/challenge/:id', auth, challenge_controller.delete_challenge);
