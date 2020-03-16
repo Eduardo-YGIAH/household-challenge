@@ -3,6 +3,7 @@ import { UserContext } from '../context/UserContext';
 import { HouseholdContext } from '../context/HouseholdContext';
 import { navigate } from '@reach/router';
 import * as auth from '../helperFunctions/auth';
+import useDataFetcher from '../customHooks/useDataFetcher';
 
 export default function Members() {
   const { user, setUser } = useContext(UserContext);
@@ -16,19 +17,33 @@ export default function Members() {
       const persistUser = auth.isAuthenticated();
       setUser(persistUser);
     }
-    if (household.owner === '') {
-      console.log('NEEDS A DATA FETCHER');
-      setHousehold({
-        ...household,
-        title: 'A dummy title',
-        owner: 'this guy',
-      });
-    }
   });
+  const { data, isLoading, error } = useDataFetcher('/api/household');
+  if (!household) {
+    setHousehold(data[0]);
+  } else if (Object.keys(household).length <= 3) {
+    setHousehold(data[0]);
+  }
+
+  if (error) {
+    return <p style={{ color: 'red' }}>{error.message}</p>;
+  }
+
+  if (isLoading) {
+    return <p>Loading members...</p>;
+  }
+
   return (
     <div>
       <h1>Members</h1>
       <p>from household {household.title}</p>
+
+      {/* {data.data.members.map(member => (
+        <>
+          <h3>{member.name}</h3>
+          <p>{member.email}</p>
+        </>
+      ))} */}
     </div>
   );
 }
