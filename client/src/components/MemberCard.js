@@ -3,12 +3,15 @@ import './MemberCard.scss';
 import Button from './Button';
 
 export default function MemberCard({ name, email }) {
-  const btnMemberListItem = {
-    label: 'Accept',
+  const btnDelete = {
+    label: 'Remove',
     link: '#',
-    onclick: () => {},
-    style: 'small',
+    onclick: () => {
+      //TODO: REMOVE MEMBER
+    },
+    style: 'small-danger',
   };
+
   return (
     <div className='card__member'>
       <div className='card__member-body'>
@@ -22,7 +25,7 @@ export default function MemberCard({ name, email }) {
           <p className='card__member-email'>{email}</p>
         </div>
       </div>
-      <Button btn={btnMemberListItem} />
+      <Button btn={btnDelete} />
     </div>
   );
 }

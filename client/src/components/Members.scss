@@ -1,0 +1,11 @@
+@import '../variables.scss';
+
+.spacer__vertical {
+  width: 100%;
+  height: 30px;
+}
+
+.line__seperator {
+  width: 100%;
+  border-top: 1px solid $primary-color;
+}
