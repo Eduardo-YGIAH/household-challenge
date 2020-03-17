@@ -1,0 +1,26 @@
+@import '../variables.scss';
+
+.card__member {
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid $primary-color;
+  padding-top: 8px;
+  margin: 10px 0;
+}
+
+.card__member-body {
+  display: flex;
+}
+
+.card__member-avatar {
+  vertical-align: middle;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.card__member-details {
+  margin: 0 10px;
+}

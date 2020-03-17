@@ -2,6 +2,9 @@ import React, { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { navigate } from '@reach/router';
 import * as auth from '../helperFunctions/auth';
+import MemberCard from './MemberCard';
+import Button from './Button';
+import './Members.scss';
 
 export default function Members() {
   const { user, setUser } = useContext(UserContext);
@@ -16,23 +19,38 @@ export default function Members() {
     }
   });
 
+  const btnInvite = {
+    label: 'Invite Member',
+    link: '#',
+    onclick: () => {},
+    style: 'secondary',
+  };
+
+  const btnCreateChallenge = {
+    label: 'Create Challenge',
+    link: '/create-challenge',
+    onclick: () => {},
+    style: 'large',
+  };
+
   if (user.isAuthenticated) {
     if (user.isOwner.length > 0) {
       const i = user.isOwner.length - 1;
       const household = user.isOwner[i];
       const householdName = household.title;
-      const membersArr = household.members;
+      const membersArr = user.isOwner[0].members;
       return (
         <div>
           <h1>Members</h1>
           <p>{householdName}</p>
-
           {membersArr.map(member => (
-            <>
-              <h3>{member.name}</h3>
-              <p>{member.email}</p>
-            </>
+            <MemberCard key={membersArr.indexOf(member)} name={member.name} email={member.email} />
           ))}
+          <div className='line__seperator'></div>
+          <div className='spacer__vertical'></div>
+          <Button btn={btnInvite} />
+          <div className='spacer__vertical'></div>
+          <Button btn={btnCreateChallenge} />
         </div>
       );
     } else if (user.isMemberOf.length > 0) {

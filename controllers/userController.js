@@ -21,7 +21,28 @@ exports.login = async (req, res) => {
       return res.status(401).send({ error: 'Login failed! Check authentication credentials' });
     }
     const token = await user.generateAuthToken();
-    res.send({ user, token });
+    const id = user._id;
+    if (user.isOwner.length > 0) {
+      await User.findById({ _id: id })
+        .populate({ path: 'isOwner', populate: { path: 'members' } })
+        .exec((err, user) => {
+          if (err) {
+            throw new Error(err);
+          }
+          res.send({ user, token });
+        });
+    } else if (user.isMemberOf.length > 0) {
+      await User.findById({ _id: id })
+        .populate({ path: 'isMemberOf', populate: { path: 'members' } })
+        .exec((err, user) => {
+          if (err) {
+            throw new Error(err);
+          }
+          res.send({ user, token });
+        });
+    } else {
+      res.send({ user, token });
+    }
   } catch (error) {
     res.status(400).send(error);
   }
