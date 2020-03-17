@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { navigate } from '@reach/router';
 import * as auth from '../helperFunctions/auth';
+import MemberCard from './MemberCard';
 
 export default function Members() {
   const { user, setUser } = useContext(UserContext);
@@ -21,17 +22,14 @@ export default function Members() {
       const i = user.isOwner.length - 1;
       const household = user.isOwner[i];
       const householdName = household.title;
-      const membersArr = household.members;
+      const membersArr = [1, 2];
       return (
         <div>
           <h1>Members</h1>
           <p>{householdName}</p>
-
+          <div className='vertical-spacer'></div>
           {membersArr.map(member => (
-            <>
-              <h3>{member.name}</h3>
-              <p>{member.email}</p>
-            </>
+            <MemberCard key={membersArr.indexOf(member)} />
           ))}
         </div>
       );
