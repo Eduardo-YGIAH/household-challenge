@@ -1,24 +1,20 @@
 const { Challenge } = require('../models/Challenge.js');
 const User = require('../models/User.js');
 
-//TODO - NNOT WORKING
+//TODO - VALIDATION
 exports.create_challenge = async (req, res) => {
   try {
-    const challenge = new Challenge({
-      ...req.body,
+    const user = await User.findById({ _id: req.user._id });
+    const household = await Household.findById({ _id: user.isOwner[0] });
+    household.challenges.push(req.body);
+    household.save((err, household) => {
+      if (err) {
+        res.send(err);
+      } else {
+        console.log('Saved', household);
+      }
     });
-    await challenge.save();
-    const user = await User.findOneAndUpdate({ _id: req.user._id })
-      .populate('isOwner')
-      .exec((err, userHousehold) => {
-        if (err) {
-          res.status(500).send(err);
-        } else {
-          user.update({ $push: { 'userHousehold.$.isOwner[0].$.challenges': challenge } });
-          userHousehold.save();
-          res.send(userHousehold);
-        }
-      });
+    res.send({ user, household });
   } catch (err) {
     res.send(err);
   }
@@ -26,6 +22,7 @@ exports.create_challenge = async (req, res) => {
 
 exports.get_challenge = async (req, res) => {
   try {
+    // ========
     const _id = req.params.id;
     const challenge = await Challenge.findOne({ _id, householdId: req.body.householdId });
 

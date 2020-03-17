@@ -1,13 +1,10 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
-import { HouseholdContext } from '../context/HouseholdContext';
 import { navigate } from '@reach/router';
 import * as auth from '../helperFunctions/auth';
-import useDataFetcher from '../customHooks/useDataFetcher';
 
 export default function Members() {
   const { user, setUser } = useContext(UserContext);
-  const { household, setHousehold } = useContext(HouseholdContext);
 
   React.useEffect(() => {
     if (!user.isAuthenticated && !auth.isAuthenticated()) {
@@ -18,32 +15,49 @@ export default function Members() {
       setUser(persistUser);
     }
   });
-  const { data, isLoading, error } = useDataFetcher('/api/household');
-  if (!household) {
-    setHousehold(data[0]);
-  } else if (Object.keys(household).length <= 3) {
-    setHousehold(data[0]);
+
+  if (user.isAuthenticated) {
+    if (user.isOwner.length > 0) {
+      const i = user.isOwner.length - 1;
+      const household = user.isOwner[i];
+      const householdName = household.title;
+      const membersArr = household.members;
+      return (
+        <div>
+          <h1>Members</h1>
+          <p>{householdName}</p>
+
+          {membersArr.map(member => (
+            <>
+              <h3>{member.name}</h3>
+              <p>{member.email}</p>
+            </>
+          ))}
+        </div>
+      );
+    } else if (user.isMemberOf.length > 0) {
+      const i = user.isMemberOf.length - 1;
+      const household = user.isMemberOf[i];
+      const householdName = household.title;
+      const membersArr = household.members;
+      return (
+        <div>
+          <h1>Members</h1>
+          <p>{householdName}</p>
+
+          {membersArr.map(member => (
+            <>
+              <h3>{member.name}</h3>
+              <p>{member.email}</p>
+            </>
+          ))}
+        </div>
+      );
+    } else {
+      setTimeout(() => {
+        navigate('/welcome');
+      }, 4000);
+    }
   }
-
-  if (error) {
-    return <p style={{ color: 'red' }}>{error.message}</p>;
-  }
-
-  if (isLoading) {
-    return <p>Loading members...</p>;
-  }
-
-  return (
-    <div>
-      <h1>Members</h1>
-      <p>from household {household.title}</p>
-
-      {/* {data.data.members.map(member => (
-        <>
-          <h3>{member.name}</h3>
-          <p>{member.email}</p>
-        </>
-      ))} */}
-    </div>
-  );
+  return <div>You are not authenticated</div>;
 }

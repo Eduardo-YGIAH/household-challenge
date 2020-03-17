@@ -13,11 +13,11 @@ exports.create_household = async (req, res) => {
     await user.save();
     await User.findOne({ _id: req.user._id })
       .populate('isOwner')
-      .exec(function(err, userHousehold) {
+      .exec(function(err, user) {
         if (err) {
           res.status(500).send(err);
         } else {
-          res.send(userHousehold);
+          res.status(201).send({ user, household });
         }
       });
   } catch (error) {

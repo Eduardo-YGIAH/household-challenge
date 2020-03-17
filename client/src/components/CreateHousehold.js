@@ -21,7 +21,14 @@ export default function CreateHousehold() {
           .post('/api/household', { title: values.values.title })
           .then(res => {
             if (res.status === 201) {
+              const userObj = {
+                isAuthenticated: true,
+                ...res.data.user,
+              };
+              localStorage.setItem('userObj', JSON.stringify(userObj));
+              setUser(userObj);
               setHousehold(res.data.household);
+
               navigate('/members');
             } else {
               console.log(res);
