@@ -24,7 +24,7 @@ exports.login = async (req, res) => {
     const id = user._id;
     if (user.isOwner.length > 0) {
       await User.findById({ _id: id })
-        .populate('isOwner')
+        .populate({ path: 'isOwner', populate: { path: 'members' } })
         .exec((err, user) => {
           if (err) {
             throw new Error(err);
@@ -33,7 +33,7 @@ exports.login = async (req, res) => {
         });
     } else if (user.isMemberOf.length > 0) {
       await User.findById({ _id: id })
-        .populate('isMemberOf')
+        .populate({ path: 'isMemberOf', populate: { path: 'members' } })
         .exec((err, user) => {
           if (err) {
             throw new Error(err);

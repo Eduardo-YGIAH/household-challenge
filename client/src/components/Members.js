@@ -22,14 +22,14 @@ export default function Members() {
       const i = user.isOwner.length - 1;
       const household = user.isOwner[i];
       const householdName = household.title;
-      const membersArr = [1, 2];
+      const membersArr = user.isOwner[0].members;
       return (
         <div>
           <h1>Members</h1>
           <p>{householdName}</p>
           <div className='vertical-spacer'></div>
           {membersArr.map(member => (
-            <MemberCard key={membersArr.indexOf(member)} />
+            <MemberCard key={membersArr.indexOf(member)} name={member.name} email={member.email} />
           ))}
         </div>
       );

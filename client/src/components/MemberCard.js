@@ -2,7 +2,7 @@ import React from 'react';
 import './MemberCard.scss';
 import Button from './Button';
 
-export default function MemberCard() {
+export default function MemberCard({ name, email }) {
   const btnMemberListItem = {
     label: 'Accept',
     link: '#',
@@ -18,8 +18,8 @@ export default function MemberCard() {
           alt='#'
         />
         <div className='card__member-details'>
-          <h4 className='card_member-name'>SomeName</h4>
-          <p className='card__member-email'>someemail</p>
+          <h4 className='card_member-name'>{name}</h4>
+          <p className='card__member-email'>{email}</p>
         </div>
       </div>
       <Button btn={btnMemberListItem} />
