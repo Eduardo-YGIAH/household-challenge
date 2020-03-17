@@ -14,13 +14,17 @@ export default function Login() {
       setUser(persistUser);
     }
     if (user.isAuthenticated) {
-      navigate('/welcome');
+      if (user.isOwner.length > 0) {
+        navigate('/members');
+      } else if (user.isMemberOf.length > 0) {
+        navigate('/portfolio');
+      } else {
+        navigate('/welcome');
+      }
     }
   });
 
   const login = async () => {
-    console.log('Got here');
-
     const result = await (
       await fetch('/api/users/login', {
         method: 'POST',
@@ -34,6 +38,7 @@ export default function Login() {
         }),
       })
     ).json();
+    console.log(result);
     if (result.token) {
       const userObj = {
         isAuthenticated: true,
@@ -42,9 +47,19 @@ export default function Login() {
         email: result.user.email,
         token: result.token,
         avatar: result.user.avatar || '',
+        isOwner: result.user.isOwner,
+        isMemberOf: result.user.isMemberOf,
       };
       auth.updateUserStateAndStorage(setUser, userObj);
-      navigate('/welcome');
+      if (user.isAuthenticated) {
+        if (user.isOwner.length > 0) {
+          navigate('/members');
+        } else if (user.isMemberOf.length > 0) {
+          navigate('/portfolio');
+        } else {
+          navigate('/welcome');
+        }
+      }
     } else {
       console.log(result.error);
     }
