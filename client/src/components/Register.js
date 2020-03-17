@@ -41,9 +41,12 @@ export default function Register() {
         if (response.status === 201) {
           const userObj = {
             isAuthenticated: true,
+            _id: response.data.user._id,
             name: response.data.user.name,
             email: response.data.user.email,
             token: response.data.token,
+            isMemberOf: response.data.user.isMemberOf,
+            isOwner: response.data.user.isOwner,
           };
           auth.updateUserStateAndStorage(setUser, userObj);
         }

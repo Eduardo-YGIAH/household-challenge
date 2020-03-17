@@ -16,6 +16,15 @@ let householdSchema = new Schema(
       ref: 'User',
     },
     challenges: [challengeSchema],
+    members: {
+      type: [
+        {
+          type: mongoose.Types.ObjectId,
+          ref: 'User',
+        },
+      ],
+      default: [],
+    },
   },
   {
     timestamps: true,

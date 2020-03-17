@@ -11,7 +11,7 @@ export default function CreateHousehold() {
   const { setHousehold } = useContext(HouseholdContext);
   const { values, handleChange, handleSubmit } = useForm({
     initialValues: {
-      avatar: '',
+      title: '',
     },
     onSubmit(values, errors) {
       if (errors) {
@@ -21,7 +21,14 @@ export default function CreateHousehold() {
           .post('/api/household', { title: values.values.title })
           .then(res => {
             if (res.status === 201) {
+              const userObj = {
+                isAuthenticated: true,
+                ...res.data.user,
+              };
+              localStorage.setItem('userObj', JSON.stringify(userObj));
+              setUser(userObj);
               setHousehold(res.data.household);
+
               navigate('/members');
             } else {
               console.log(res);

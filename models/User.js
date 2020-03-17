@@ -4,8 +4,9 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Household = require('./Household');
+const Schema = mongoose.Schema;
 
-const userSchema = new mongoose.Schema(
+const userSchema = Schema(
   {
     name: {
       type: String,
@@ -46,6 +47,8 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    isMemberOf: [{ type: Schema.Types.ObjectId, ref: 'Household' }],
+    isOwner: [{ type: Schema.Types.ObjectId, ref: 'Household' }],
   },
   {
     timestamps: true,

@@ -1,12 +1,10 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
-import { HouseholdContext } from '../context/HouseholdContext';
 import { navigate } from '@reach/router';
 import * as auth from '../helperFunctions/auth';
 
 export default function Members() {
   const { user, setUser } = useContext(UserContext);
-  const { household, setHousehold } = useContext(HouseholdContext);
 
   React.useEffect(() => {
     if (!user.isAuthenticated && !auth.isAuthenticated()) {
@@ -16,19 +14,50 @@ export default function Members() {
       const persistUser = auth.isAuthenticated();
       setUser(persistUser);
     }
-    if (household.owner === '') {
-      console.log('NEEDS A DATA FETCHER');
-      setHousehold({
-        ...household,
-        title: 'A dummy title',
-        owner: 'this guy',
-      });
-    }
   });
-  return (
-    <div>
-      <h1>Members</h1>
-      <p>from household {household.title}</p>
-    </div>
-  );
+
+  if (user.isAuthenticated) {
+    if (user.isOwner.length > 0) {
+      const i = user.isOwner.length - 1;
+      const household = user.isOwner[i];
+      const householdName = household.title;
+      const membersArr = household.members;
+      return (
+        <div>
+          <h1>Members</h1>
+          <p>{householdName}</p>
+
+          {membersArr.map(member => (
+            <>
+              <h3>{member.name}</h3>
+              <p>{member.email}</p>
+            </>
+          ))}
+        </div>
+      );
+    } else if (user.isMemberOf.length > 0) {
+      const i = user.isMemberOf.length - 1;
+      const household = user.isMemberOf[i];
+      const householdName = household.title;
+      const membersArr = household.members;
+      return (
+        <div>
+          <h1>Members</h1>
+          <p>{householdName}</p>
+
+          {membersArr.map(member => (
+            <>
+              <h3>{member.name}</h3>
+              <p>{member.email}</p>
+            </>
+          ))}
+        </div>
+      );
+    } else {
+      setTimeout(() => {
+        navigate('/welcome');
+      }, 4000);
+    }
+  }
+  return <div>You are not authenticated</div>;
 }
