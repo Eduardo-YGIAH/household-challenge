@@ -1,16 +1,24 @@
 const { Challenge } = require('../models/Challenge.js');
 const User = require('../models/User.js');
+const Household = require('../models/Household');
 
 exports.create_challenge = async (req, res) => {
   try {
     const { startDate, endDate } = req.body;
-    const user = await User.findOne({ _id: req.user._id });
-    user.isOwner[0].challenges.push({ startDate, endDate });
-    console.log(user.isOwner);
+    const challenge = new Challenge({ startDate, endDate });
+    await challenge.save();
+    const household = await Household.findByIdAndUpdate(
+      { _id: req.user.isOwner[0]._id },
+      { $push: { challenges: challenge } },
+    );
+    await household.save();
+    // await User.replaceOne({ _id: req.user._id }, { isOwner: household });
+    const user = await User.findById({ _id: req.user._id });
+    // await user.save();
     const token = req.token;
-    await user.save();
     res.status(201).send({ user, token });
   } catch (err) {
+    console.log(err);
     res.send(err);
   }
 };

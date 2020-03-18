@@ -4,43 +4,33 @@ let taskSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      default: undefined,
-      required: true
+      required: true,
     },
     description: {
       type: String,
-      default: undefined,
-      requied: true
+      required: true,
     },
-    checkListItems: {
+    todos: {
       type: Array,
-      default: undefined
     },
-    taskValue: {
+    points: {
       type: Number,
-      default: 0,
       min: 0,
-      max: 20,    /* this can be changed */
-      required: true
+      max: 20 /* this can be changed */,
+      required: true,
     },
     image: {
-      data: Buffer,
-      contentType: String
+      type: String,
     },
-    challengeId: {
-      type: mongoose.Types.ObjectId,
-      requied: true,
-      ref: 'Challenge'
-    }
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const Task = mongoose.model('Task', taskSchema);
 
 module.exports = {
   Task,
-  taskSchema
-}
+  taskSchema,
+};
