@@ -36,15 +36,17 @@ export default function TaskForm() {
           headers: { Authorization: `Bearer ${user.token}` },
         };
         const payload = {
+          todos: todos,
           title: values.values.title,
-          description: values.values.desccrciption,
-          points: values.values.points,
+          description: values.values.description,
+          points: Number(values.values.points),
+          challengeId: user.isOwner[0].challenges[0]._id,
         };
         axios
-          .post('/api/challenge', payload, options)
+          .post('/api/task', payload, options)
           .then(res => {
             if (res.status === 201) {
-              console.log('Good', res.data.user);
+              console.log('USER', res.data.user);
               const token = res.data.token;
               const userObj = {
                 isAuthenticated: true,
@@ -60,7 +62,7 @@ export default function TaskForm() {
             }
           })
           .catch(err => {
-            console.log(err);
+            console.log('FROM FORM', err);
           });
       }
     },
@@ -86,51 +88,61 @@ export default function TaskForm() {
     const newTodos = todos.filter((_, index) => index !== todoIndex);
     setTodos(newTodos);
   };
-
-  return (
-    <div className='signup-form-container'>
-      <h1 className='heading'>Create a Task</h1>
-      <div>
-        <AddChecklistItems
-          saveTodo={todoText => {
-            const trimmedText = todoText.trim();
-            if (trimmedText.length > 0) {
-              setTodos([...todos, trimmedText]);
-            }
-          }}
-        />
-        <TodoList todos={todos} deleteTodo={deleteTodo} />
-      </div>
-      <div className='spacer__vertical'></div>
-      <h3 className='sub-heading no-margin'>Now add a Name and Description</h3>
-      <form onSubmit={handleSubmit} className='signup-form'>
-        <div className='signup-form-group'>
-          <label htmlFor='title'>Task Name</label>
-          <input type='text' name='title' onChange={handleChange} value={values.title} required />
-        </div>
-        <div className='signup-form-group'>
-          <label htmlFor='description'>Description</label>
-          <textarea
-            rows='4'
-            cols='50'
-            className='task-description'
-            name='description'
-            onChange={handleChange}
-            value={values.description}
-            required
+  if (user.isAuthenticated) {
+    return (
+      <div className='signup-form-container'>
+        <h1 className='heading'>Create a Task</h1>
+        <div>
+          <AddChecklistItems
+            saveTodo={todoText => {
+              const trimmedText = todoText.trim();
+              if (trimmedText.length > 0) {
+                setTodos([...todos, trimmedText]);
+              }
+            }}
           />
+          <TodoList todos={todos} deleteTodo={deleteTodo} />
         </div>
-        <div className='signup-form-group'>
-          <label htmlFor='points'>Task Points 1 - 20</label>
-          <input type='number' min='1' max='20' name='points' onChange={handleChange} value={values.points} required />
+        <div className='spacer__vertical'></div>
+        <h3 className='sub-heading no-margin'>Now add a Name and Description</h3>
+        <form onSubmit={handleSubmit} className='signup-form'>
+          <div className='signup-form-group'>
+            <label htmlFor='title'>Task Name</label>
+            <input type='text' name='title' onChange={handleChange} value={values.title} required />
+          </div>
+          <div className='signup-form-group'>
+            <label htmlFor='description'>Description</label>
+            <textarea
+              rows='4'
+              cols='50'
+              className='task-description'
+              name='description'
+              onChange={handleChange}
+              value={values.description}
+              required
+            />
+          </div>
+          <div className='signup-form-group'>
+            <label htmlFor='points'>Task Points 1 - 20</label>
+            <input
+              type='number'
+              min='1'
+              max='20'
+              name='points'
+              onChange={handleChange}
+              value={values.points}
+              required
+            />
+          </div>
+          <button className='btn' type='submit'>
+            Create Task
+          </button>
+        </form>
+        <div className='link'>
+          <Link to='../'>Cancel</Link>
         </div>
-        <button className='btn' type='submit'>
-          Create Task
-        </button>
-      </form>
-      <div className='link'>
-        <Link to='../'>Cancel</Link>
       </div>
-    </div>
-  );
+    );
+  }
+  return <h2 className='sub-heading'>Authenticating...</h2>;
 }
