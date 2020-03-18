@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
-import { HouseholdContext } from '../context/HouseholdContext';
+// import { HouseholdContext } from '../context/HouseholdContext';
 import { UserContext } from '../context/UserContext';
-import axios from '../helperFunctions/axios.config';
+import axios from 'axios';
 import { Link, navigate } from '@reach/router';
 import * as auth from '../helperFunctions/auth';
 import useForm from '../customHooks/useForm';
 
 export default function CreateHousehold() {
   const { user, setUser } = useContext(UserContext);
-  const { setHousehold } = useContext(HouseholdContext);
+  // const { setHousehold } = useContext(HouseholdContext);
   const { values, handleChange, handleSubmit } = useForm({
     initialValues: {
       title: '',
@@ -17,24 +17,32 @@ export default function CreateHousehold() {
       if (errors) {
         console.log(errors);
       } else {
+        const options = {
+          headers: { Authorization: `Bearer ${user.token}` },
+        };
         axios
-          .post('/api/household', { title: values.values.title })
+          .post('/api/household', { title: values.values.title }, options)
           .then(res => {
             if (res.status === 201) {
+              console.log('Good', res.data.user);
+              const token = res.data.token;
               const userObj = {
                 isAuthenticated: true,
                 ...res.data.user,
+                token,
               };
-              localStorage.setItem('userObj', JSON.stringify(userObj));
               setUser(userObj);
-              setHousehold(res.data.household);
+              localStorage.setItem('userObj', JSON.stringify(userObj));
+              // setHousehold(res.data.household);
 
               navigate('/members');
             } else {
-              console.log(res);
+              console.log('ERROR', res);
             }
           })
-          .catch(console.log);
+          .catch(err => {
+            console.log(err);
+          });
       }
     },
     validate(values) {
@@ -47,7 +55,7 @@ export default function CreateHousehold() {
   });
 
   React.useEffect(() => {
-    if (!user.isAuthenticated && !auth.isAuthenticated()) {
+    if (!auth.isAuthenticated()) {
       navigate('/login');
     }
     if (!user.isAuthenticated && auth.isAuthenticated()) {

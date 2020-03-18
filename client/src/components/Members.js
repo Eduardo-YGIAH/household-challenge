@@ -34,6 +34,7 @@ export default function Members() {
   };
 
   if (user.isAuthenticated) {
+    console.log(user);
     if (user.isOwner.length > 0) {
       const i = user.isOwner.length - 1;
       const household = user.isOwner[i];

@@ -47,13 +47,15 @@ const userSchema = Schema(
         },
       },
     ],
-    isMemberOf: [{ type: Schema.Types.ObjectId, ref: 'Household' }],
-    isOwner: [{ type: Schema.Types.ObjectId, ref: 'Household' }],
+    isMemberOf: [{ type: Schema.Types.ObjectId, ref: 'Household', autopopulate: true }],
+    isOwner: [{ type: Schema.Types.ObjectId, ref: 'Household', autopopulate: true }],
   },
   {
     timestamps: true,
   },
 );
+
+userSchema.plugin(require('mongoose-autopopulate'));
 
 userSchema.virtual('households', {
   ref: 'Household',
