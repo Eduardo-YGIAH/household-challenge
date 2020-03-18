@@ -1,8 +1,12 @@
-const axios = require('axios');
+import Axios from 'axios';
+import * as auth from './auth.js';
 const user = JSON.parse(localStorage.getItem('userObj'));
-if (!user) {
-  axios.defaults.headers.common = { Authorization: `` };
-} else if (user) {
-  axios.defaults.headers.common = { Authorization: `Bearer ${user.token}` };
+
+if (!auth.isAuthenticated()) {
+  Axios.defaults.headers.common = { Authorization: `` };
 }
-export default axios;
+if (auth.isAuthenticated()) {
+  Axios.defaults.headers.common = { Authorization: `Bearer ${user.token}` };
+}
+
+export default Axios;

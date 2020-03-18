@@ -93,7 +93,6 @@ exports.update_info = async (req, res) => {
 };
 
 exports.upload_avatar = (req, res) => {
-  console.log(req);
   const file = req.files.avatar;
   cloudinary.uploader.upload(file.tempFilePath, async function(err, result) {
     const avatar_url = result.secure_url;

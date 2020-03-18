@@ -1,20 +1,15 @@
 const { Challenge } = require('../models/Challenge.js');
 const User = require('../models/User.js');
 
-//TODO - VALIDATION
 exports.create_challenge = async (req, res) => {
   try {
-    const user = await User.findById({ _id: req.user._id });
-    const household = await Household.findById({ _id: user.isOwner[0] });
-    household.challenges.push(req.body);
-    household.save((err, household) => {
-      if (err) {
-        res.send(err);
-      } else {
-        console.log('Saved', household);
-      }
-    });
-    res.send({ user, household });
+    const { startDate, endDate } = req.body;
+    const user = await User.findOne({ _id: req.user._id });
+    user.isOwner[0].challenges.push({ startDate, endDate });
+    console.log(user.isOwner);
+    const token = req.token;
+    await user.save();
+    res.status(201).send({ user, token });
   } catch (err) {
     res.send(err);
   }
