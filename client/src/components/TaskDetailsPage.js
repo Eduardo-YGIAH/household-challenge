@@ -4,6 +4,7 @@ import { UserContext } from '../context/UserContext';
 import * as auth from '../helperFunctions/auth';
 import { navigate } from '@reach/router';
 import './TaskDetailsPage.scss';
+import Button from './Button';
 
 export default function TaskDetailsPage() {
   const { user, setUser } = useContext(UserContext);
@@ -24,6 +25,12 @@ export default function TaskDetailsPage() {
     const tasks = user.isOwner[0].challenges[0].tasks;
     const task = user.isOwner[0].challenges[0].tasks[tasks.length - 1];
 
+    const btnCreateMore = {
+      link: '/create-task',
+      style: '',
+      label: 'Create Another Task',
+    };
+
     return (
       <div className='container__task-page'>
         <h1 className='heading'>Task Details</h1>
@@ -41,6 +48,8 @@ export default function TaskDetailsPage() {
         </h3>
         <div className='spacer__vertical'></div>
         <TaskDetailsCard task={task} user={user} />
+        <div className='spacer__vertical-10'></div>
+        <Button btn={btnCreateMore} />
       </div>
     );
   }
