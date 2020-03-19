@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { Household, householdSchema } = require('./Household');
+const Household = require('./Household');
 const Schema = mongoose.Schema;
 
 const userSchema = Schema(
@@ -48,7 +48,7 @@ const userSchema = Schema(
       },
     ],
     isMemberOf: [{ type: Schema.Types.ObjectId, ref: 'Household', autopopulate: true }],
-    isOwner: [householdSchema],
+    isOwner: [{ type: Schema.Types.ObjectId, ref: 'Household', autopopulate: true }],
   },
   {
     timestamps: true,
@@ -61,6 +61,12 @@ userSchema.virtual('households', {
   ref: 'Household',
   localField: '_id',
   foreignField: 'owner',
+});
+
+userSchema.virtual('members', {
+  ref: 'Household',
+  localField: '_id',
+  foreignField: 'members',
 });
 
 userSchema.methods.toJSON = function() {

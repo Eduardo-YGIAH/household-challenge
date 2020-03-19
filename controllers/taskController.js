@@ -1,47 +1,29 @@
-const { Task } = require('../models/Tasks');
-// const User = require('../models/User');
-// const Household = require('../models/Household');
-// const { Challenge } = require('../models/Challenge');
+const Task = require('../models/Tasks');
+const User = require('../models/User');
+const Household = require('../models/Household');
+const Challenge = require('../models/Challenge');
 
 exports.create_task = async (req, res) => {
   try {
-    req.user.isOwner[0].challenges[0].tasks.push(req.body);
-    await req.user.save();
-    const token = req.token;
-    const user = req.user;
-    res.status(201).send({ user, token });
-  } catch (error) {
-    console.log(error);
-    res.status(400).send(error);
-  }
+    const { title, description, todos, points } = req.body;
+    const task = new Task({
+      title,
+      description,
+      todos,
+      points,
+    });
+    await task.save();
+    console.log(task);
+    const household = await Household.findOne({ owner: req.user._id });
 
-  //   const { title, description, todos, points } = req.body;
-  //   const task = new Task({
-  //     title,
-  //     description,
-  //     todos,
-  //     points,
-  //   });
-  //   await task.save();
-  //   const challenge = await Challenge.findByIdAndUpdate(
-  //     { _id: req.user.isOwner[0].challenge[0]._id },
-  //     { $push: { tasks: task } },
-  //   );
-  //   await challenge.save();
-  //   const household = await Household.findByIdAndUpdate(
-  //     { _id: req.user.isOwner[0]._id },
-  //     { $push: { challenges: challenge } },
-  //   );
-  //   await household.save();
-  //   // await User.replaceOne({ _id: req.user._id }, { isOwner: household });
-  //   const user = await User.findById({ _id: req.user._id });
-  //   // await user.save();
-  //   const token = req.token;
-  //   res.status(201).send({ user, token });
-  // } catch (err) {
-  //   console.log(err);
-  //   res.send(err);
-  // }
+    await Challenge.findByIdAndUpdate({ _id: household.challenges[0]._id }, { $push: { tasks: task._id } });
+    const user = await User.findById({ _id: req.user._id });
+    const token = req.token;
+    res.status(201).send({ user, token });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
 };
 
 exports.get_task = async (req, res) => {

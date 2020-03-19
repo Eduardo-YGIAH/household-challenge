@@ -28,9 +28,14 @@ let taskSchema = new mongoose.Schema(
   },
 );
 
+taskSchema.virtual('tasks', {
+  ref: 'Challenges',
+  localField: '_id',
+  foreignField: 'tasks',
+});
+
+taskSchema.plugin(require('mongoose-autopopulate'));
+
 const Task = mongoose.model('Task', taskSchema);
 
-module.exports = {
-  Task,
-  taskSchema,
-};
+module.exports = Task;

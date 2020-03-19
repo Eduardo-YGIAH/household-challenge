@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { taskSchema } = require('./Tasks');
 const Schema = mongoose.Schema;
 
 let challengeSchema = new Schema(
@@ -10,16 +9,21 @@ let challengeSchema = new Schema(
     endDate: {
       type: Date,
     },
-    tasks: [taskSchema],
+    tasks: [{ type: Schema.Types.ObjectId, ref: 'Task', autopopulate: true }],
   },
   {
     timestamps: true,
   },
 );
 
+challengeSchema.virtual('challenges', {
+  ref: 'Household',
+  localField: '_id',
+  foreignField: 'challenges',
+});
+
+challengeSchema.plugin(require('mongoose-autopopulate'));
+
 const Challenge = mongoose.model('Challenge', challengeSchema);
 
-module.exports = {
-  Challenge,
-  challengeSchema,
-};
+module.exports = Challenge;

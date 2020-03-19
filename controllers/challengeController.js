@@ -1,38 +1,25 @@
-const { Challenge } = require('../models/Challenge.js');
-// const User = require('../models/User.js');
-// const Household = require('../models/Household');
+const Challenge = require('../models/Challenge.js');
+const User = require('../models/User.js');
+const Household = require('../models/Household');
 
 exports.create_challenge = async (req, res) => {
   try {
-    req.user.isOwner[0].challenges.push(req.body);
-    await req.user.save();
+    const { startDate, endDate } = req.body;
+    const challenge = new Challenge({ startDate, endDate });
+    await challenge.save();
+    const household = await Household.findByIdAndUpdate(
+      { _id: req.user.isOwner[0]._id },
+      { $push: { challenges: challenge._id } },
+    );
+    await household.save();
+    const user = await User.findById({ _id: req.user._id });
+    console.log('HOUSEHOLD SAVED WITH CHALLENGE ID', household);
     const token = req.token;
-    const user = req.user;
     res.status(201).send({ user, token });
-  } catch (error) {
-    console.log(error);
-    res.status(400).send(error);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
   }
-
-  // try {
-  //   const { startDate, endDate } = req.body;
-  //   const challenge = new Challenge({ startDate, endDate });
-  //   await challenge.save();
-  //   const household = await Household.findByIdAndUpdate(
-  //     { _id: req.user.isOwner[0]._id },
-  //     { $push: { challenges: challenge } },
-  //   );
-  //   await household.save();
-  //   // await User.replaceOne({ _id: req.user._id }, { isOwner: household });
-  //   const user = await User.findById({ _id: req.user._id });
-  //   // await user.save();
-  //   console.log('HOUSEHOLD SAVED WITH CHALLENGE', household);
-  //   const token = req.token;
-  //   res.status(201).send({ user, token });
-  // } catch (err) {
-  //   console.log(err);
-  //   res.send(err);
-  // }
 };
 
 exports.get_challenge = async (req, res) => {

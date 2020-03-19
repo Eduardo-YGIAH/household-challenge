@@ -27,7 +27,7 @@ export default function CreateHousehold() {
           .post('/api/household', payload, options)
           .then(res => {
             console.log('Good', res.data.user);
-            if (res.status === 200) {
+            if (res.status === 201) {
               const token = res.data.token;
               const userObj = {
                 isAuthenticated: true,
