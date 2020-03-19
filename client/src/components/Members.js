@@ -34,12 +34,17 @@ export default function Members() {
   };
 
   if (user.isAuthenticated) {
-    console.log(user);
+    if (!user.isOwner) {
+      navigate('/welcome');
+    }
+    if (!user.isOwner[0]) {
+      navigate('/create-household');
+    }
     if (user.isOwner.length > 0) {
       const i = user.isOwner.length - 1;
       const household = user.isOwner[i];
       const householdName = household.title;
-      const membersArr = user.isOwner[0].members;
+      const membersArr = user.isOwner[i].members;
       return (
         <div>
           <h1>Members</h1>
@@ -58,25 +63,25 @@ export default function Members() {
       const i = user.isMemberOf.length - 1;
       const household = user.isMemberOf[i];
       const householdName = household.title;
-      const membersArr = household.members;
+      const membersArr = user.isMemberOf[i].members;
       return (
         <div>
           <h1>Members</h1>
           <p>{householdName}</p>
-
           {membersArr.map(member => (
-            <>
-              <h3>{member.name}</h3>
-              <p>{member.email}</p>
-            </>
+            <MemberCard key={membersArr.indexOf(member)} name={member.name} email={member.email} />
           ))}
         </div>
       );
-    } else {
-      setTimeout(() => {
-        navigate('/welcome');
-      }, 4000);
     }
+  } else {
+    setTimeout(() => {
+      navigate('/login');
+    }, 5000);
   }
-  return <div>You are not authenticated</div>;
+  return (
+    <div>
+      Loading...! <br /> Authenticating...!
+    </div>
+  );
 }

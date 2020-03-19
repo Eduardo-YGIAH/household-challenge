@@ -36,9 +36,9 @@ export default function TaskForm() {
           headers: { Authorization: `Bearer ${user.token}` },
         };
         const payload = {
-          todos: todos,
           title: values.values.title,
           description: values.values.description,
+          todos: todos,
           points: Number(values.values.points),
         };
         axios
@@ -55,7 +55,7 @@ export default function TaskForm() {
               setUser(userObj);
               localStorage.setItem('userObj', JSON.stringify(userObj));
 
-              navigate('/about');
+              navigate('/task-details');
             } else {
               console.log('ERROR', res);
             }

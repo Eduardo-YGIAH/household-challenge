@@ -1,0 +1,17 @@
+@import '../variables.scss';
+
+.container__task-page {
+  padding: 20px 40px;
+}
+
+.sub-heading-task {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+.task-dates {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

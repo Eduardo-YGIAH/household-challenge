@@ -13,6 +13,8 @@ import CreateHousehold from './CreateHousehold';
 import Members from './Members';
 import CreateChallenge from './CreateChallenge';
 import TaskForm from './TaskForm';
+import PostChallenge from './PostChallenge';
+import TaskDetailsPage from './TaskDetailsPage';
 
 export default function Body() {
   return (
@@ -31,6 +33,8 @@ export default function Body() {
             <Members path='/members' />
             <CreateChallenge path='/create-challenge' />
             <TaskForm path='/create-task' />
+            <PostChallenge path='/post-challenge' />
+            <TaskDetailsPage path='/task-details' />
           </Router>
         </div>
       </HouseholdContextProvider>
