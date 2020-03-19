@@ -1,33 +1,47 @@
 const { Task } = require('../models/Tasks');
-const User = require('../models/User');
-const Household = require('../models/Household');
-const { Challenge } = require('../models/Challenge');
+// const User = require('../models/User');
+// const Household = require('../models/Household');
+// const { Challenge } = require('../models/Challenge');
 
 exports.create_task = async (req, res) => {
   try {
-    const { title, description, todos, points, challengeId } = req.body;
-    const task = new Task({
-      title,
-      description,
-      todos,
-      points,
-    });
-    console.log(task);
-    await task.save();
-    const challenge = await Challenge.findByIdAndUpdate({ _id: challengeId }, { $push: { tasks: task } });
-    await challenge.save();
-    const household = await Household.findOneAndUpdate({ _id: req.user.isOwner[0]._id }, { challenges: challenge });
-    // const household = await Household.findById({ _id: req.user.isOwner[0]._id });
-    // // await household.save();
-    // await User.replaceOne({ _id: req.user._id }, { isOwner: [household] });
-    const user = await User.findOneAndUpdate({ _id: req.user._id }, { isOwner: household });
-    // await user.save();
+    req.user.isOwner[0].challenges[0].tasks.push(req.body);
+    await req.user.save();
     const token = req.token;
+    const user = req.user;
     res.status(201).send({ user, token });
   } catch (error) {
     console.log(error);
     res.status(400).send(error);
   }
+
+  //   const { title, description, todos, points } = req.body;
+  //   const task = new Task({
+  //     title,
+  //     description,
+  //     todos,
+  //     points,
+  //   });
+  //   await task.save();
+  //   const challenge = await Challenge.findByIdAndUpdate(
+  //     { _id: req.user.isOwner[0].challenge[0]._id },
+  //     { $push: { tasks: task } },
+  //   );
+  //   await challenge.save();
+  //   const household = await Household.findByIdAndUpdate(
+  //     { _id: req.user.isOwner[0]._id },
+  //     { $push: { challenges: challenge } },
+  //   );
+  //   await household.save();
+  //   // await User.replaceOne({ _id: req.user._id }, { isOwner: household });
+  //   const user = await User.findById({ _id: req.user._id });
+  //   // await user.save();
+  //   const token = req.token;
+  //   res.status(201).send({ user, token });
+  // } catch (err) {
+  //   console.log(err);
+  //   res.send(err);
+  // }
 };
 
 exports.get_task = async (req, res) => {

@@ -40,7 +40,6 @@ export default function TaskForm() {
           title: values.values.title,
           description: values.values.description,
           points: Number(values.values.points),
-          challengeId: user.isOwner[0].challenges[0]._id,
         };
         axios
           .post('/api/task', payload, options)

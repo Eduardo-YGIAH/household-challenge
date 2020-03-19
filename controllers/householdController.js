@@ -2,28 +2,45 @@ const Household = require('../models/Household.js');
 const User = require('../models/User.js');
 
 exports.create_household = async (req, res) => {
-  try {
-    const household = new Household({
-      ...req.body,
-      owner: req.user._id,
-    });
-    await household.save();
-    const user = await User.findById({ _id: req.user.id });
-    user.isOwner.push(household._id);
-    await user.save();
-    await User.findOne({ _id: req.user._id })
-      .populate('isOwner')
-      .exec(function(err, user) {
-        if (err) {
-          res.status(500).send(err);
-        } else {
-          const token = req.token;
-          res.status(201).send({ user, token });
-        }
-      });
-  } catch (error) {
-    res.send(error);
+  //try {
+
+  //============
+  const updates = Object.keys(req.body);
+  const allowedUpdates = ['isOwner'];
+  const isValidOperation = updates.every(update => allowedUpdates.includes(update));
+  console.log(req.user);
+  if (!isValidOperation) {
+    return res.status(400).send({ error: 'Invalid updates!' });
   }
+
+  try {
+    updates.forEach(update => (req.user[update] = req.body[update]));
+    await req.user.save();
+    console.log(req.user);
+    const token = req.token;
+    const user = req.user;
+    res.send({ user, token });
+  } catch (error) {
+    res.status(400).send(error);
+  }
+
+  //===============
+  //   const user = await User.findById({ _id: req.user.id });
+  //   user.isOwner.push(household._id);
+  //   await user.save();
+  //   await User.findOne({ _id: req.user._id })
+  //     .populate('isOwner')
+  //     .exec(function(err, user) {
+  //       if (err) {
+  //         res.status(500).send(err);
+  //       } else {
+  //         const token = req.token;
+  //         res.status(201).send({ user, token });
+  //       }
+  //     });
+  // } catch (error) {
+  //   res.send(error);
+  // }
 };
 
 exports.get_household = async (req, res) => {

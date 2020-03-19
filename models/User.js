@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Household = require('./Household');
+const { Household, householdSchema } = require('./Household');
 const Schema = mongoose.Schema;
 
 const userSchema = Schema(
@@ -48,7 +48,7 @@ const userSchema = Schema(
       },
     ],
     isMemberOf: [{ type: Schema.Types.ObjectId, ref: 'Household', autopopulate: true }],
-    isOwner: [{ type: Schema.Types.ObjectId, ref: 'Household', autopopulate: true }],
+    isOwner: [householdSchema],
   },
   {
     timestamps: true,
