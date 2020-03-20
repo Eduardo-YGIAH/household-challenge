@@ -30,7 +30,7 @@ let householdSchema = new Schema(
         {
           type: mongoose.Types.ObjectId,
           ref: 'User',
-          autopopulate: true,
+          autopopulate: false,
         },
       ],
       default: [],

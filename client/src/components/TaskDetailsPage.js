@@ -56,10 +56,7 @@ export default function TaskDetailsPage() {
   return (
     <div className='signup-form-container'>
       <div className='spacer__vertical'></div>
-      <h3>
-        Sorry! <br />
-        There are some steps you need to complete before this.
-      </h3>
+      <h3>Authenticating...</h3>
     </div>
   );
 }
