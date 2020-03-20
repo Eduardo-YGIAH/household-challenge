@@ -5,9 +5,15 @@ import * as auth from '../helperFunctions/auth';
 import MemberCard from './MemberCard';
 import Button from './Button';
 import './Members.scss';
+// import Axios from 'axios';
 
 export default function Members() {
   const { user, setUser } = useContext(UserContext);
+  const userLocal = JSON.parse(localStorage.getItem('userObj'));
+  const token = userLocal.token;
+  const options = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
 
   React.useEffect(() => {
     if (!user.isAuthenticated && !auth.isAuthenticated()) {
@@ -16,6 +22,18 @@ export default function Members() {
     if (!user.isAuthenticated && auth.isAuthenticated()) {
       const persistUser = auth.isAuthenticated();
       setUser(persistUser);
+    }
+    if (user.isAuthenticated) {
+      function getMembersData() {
+        const id = user.isOwner[0]._id;
+        fetch(`/api/household/members/list/${id}`, options)
+          .then(res => res.json())
+          .then(res => console.log(res))
+          .catch(err => {
+            console.log(err);
+          });
+      }
+      getMembersData();
     }
   });
 

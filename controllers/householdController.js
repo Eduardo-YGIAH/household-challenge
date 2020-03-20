@@ -57,6 +57,24 @@ exports.join_household_from_name = async (req, res) => {
   }
 };
 
+exports.get_members_list = async (req, res) => {
+  try {
+    console.log(req.params);
+    await Household.find({ _id: req.params.id })
+      .populate('members')
+      .exec(function(err, members) {
+        if (err) {
+          console.log('Error in exec', err);
+        }
+        console.log(members);
+        res.send(members);
+      });
+  } catch (err) {
+    console.log('from catch', err);
+    res.send(err);
+  }
+};
+
 exports.get_household = async (req, res) => {
   try {
     const household = await Household.findOne({ owner: req.user._id });
