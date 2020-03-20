@@ -26,10 +26,12 @@ export default function Members() {
     if (user.isAuthenticated) {
       function getMembersData() {
         const id = user.isOwner[0]._id;
-        fetch
-          .get(`/api/household/members/list/${id}`, options)
+        fetch(`/api/household/members/list/${id}`, options)
           .then(res => res.json())
-          .then(res => console.log(res));
+          .then(res => console.log(res))
+          .catch(err => {
+            console.log(err);
+          });
       }
       getMembersData();
     }
