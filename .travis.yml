@@ -1,3 +1,28 @@
+language: node_js
+node_js:
+  - '9'
+sudo: true
+
+branches:
+  only:
+    - master
+
 deploy:
-  api_key:
-    secure: CI9TVaiKUM1jggeyJFTUgwMvTgaoyEj806k3aZJARggANyT6LgkQbwBRZstJXdpbjF++HBXYv0LlJmNh/UjJM+mYhrZjRw1+q3gs/6FslamPBBaRH0O0cKYjVUKMkT+dstCGAtshoSTdi57DP6BNww5C97JrDoda7gcevx0sQvd+ypY0lcESn9Uov34e6DAkhb4pKz5sbTXiAz8TtN5qEEY573A9Q8EfbpeYJ4F5Bnez6VNqB6tc6kP3kzK2DCUkMXpJr++OA2QAgDXgmGrmE2A/xvpUl9UlGYxQh2+WGb6T6xJoQdPPBBtQuKa3P+sE4lB5PQUBHwS84u53mPZTO0UzWgXZcvH1t+rHG7Q8IDGuw3uf0Yu95YGyiHENLW0GDyQ07kPfX+S6U28HxXq1rAo8W8M1EqTBd+VCWP0uNp3zF/qdMCkU2AFsQ/iMce1bylmje21J631rRkHcmZ9Z3sIiOgn1OiL4NTKhXERbQ2idhkS78NknZyNBeFnCI76oS+tfSR4lTW54uiSJ1wTRmdiyx50LMQK7TP+Cff1sTemYwvgi4TEB7ktM+2AYwYgsQFaW1NZkifctrBJnyqOaUieqGEZiSRxoZ9Upqzw+l044i/QxxQ43mwYiLwA2T8qW4AOxwmdXfyc0Ndh1tNwkAke8GAQMkPkIkOti6KCbAkE=
+  # deploy app as api server
+  - provider: heroku
+    skip_cleanup: true
+    api-key:
+      secure: CI9TVaiKUM1jggeyJFTUgwMvTgaoyEj806k3aZJARggANyT6LgkQbwBRZstJXdpbjF++HBXYv0LlJmNh/UjJM+mYhrZjRw1+q3gs/6FslamPBBaRH0O0cKYjVUKMkT+dstCGAtshoSTdi57DP6BNww5C97JrDoda7gcevx0sQvd+ypY0lcESn9Uov34e6DAkhb4pKz5sbTXiAz8TtN5qEEY573A9Q8EfbpeYJ4F5Bnez6VNqB6tc6kP3kzK2DCUkMXpJr++OA2QAgDXgmGrmE2A/xvpUl9UlGYxQh2+WGb6T6xJoQdPPBBtQuKa3P+sE4lB5PQUBHwS84u53mPZTO0UzWgXZcvH1t+rHG7Q8IDGuw3uf0Yu95YGyiHENLW0GDyQ07kPfX+S6U28HxXq1rAo8W8M1EqTBd+VCWP0uNp3zF/qdMCkU2AFsQ/iMce1bylmje21J631rRkHcmZ9Z3sIiOgn1OiL4NTKhXERbQ2idhkS78NknZyNBeFnCI76oS+tfSR4lTW54uiSJ1wTRmdiyx50LMQK7TP+Cff1sTemYwvgi4TEB7ktM+2AYwYgsQFaW1NZkifctrBJnyqOaUieqGEZiSRxoZ9Upqzw+l044i/QxxQ43mwYiLwA2T8qW4AOxwmdXfyc0Ndh1tNwkAke8GAQMkPkIkOti6KCbAkE=
+    app: household-challenge-api
+  # deploy app as front end website
+  - provider: heroku
+    skip_cleanup: true
+    api-key:
+      secure: CI9TVaiKUM1jggeyJFTUgwMvTgaoyEj806k3aZJARggANyT6LgkQbwBRZstJXdpbjF++HBXYv0LlJmNh/UjJM+mYhrZjRw1+q3gs/6FslamPBBaRH0O0cKYjVUKMkT+dstCGAtshoSTdi57DP6BNww5C97JrDoda7gcevx0sQvd+ypY0lcESn9Uov34e6DAkhb4pKz5sbTXiAz8TtN5qEEY573A9Q8EfbpeYJ4F5Bnez6VNqB6tc6kP3kzK2DCUkMXpJr++OA2QAgDXgmGrmE2A/xvpUl9UlGYxQh2+WGb6T6xJoQdPPBBtQuKa3P+sE4lB5PQUBHwS84u53mPZTO0UzWgXZcvH1t+rHG7Q8IDGuw3uf0Yu95YGyiHENLW0GDyQ07kPfX+S6U28HxXq1rAo8W8M1EqTBd+VCWP0uNp3zF/qdMCkU2AFsQ/iMce1bylmje21J631rRkHcmZ9Z3sIiOgn1OiL4NTKhXERbQ2idhkS78NknZyNBeFnCI76oS+tfSR4lTW54uiSJ1wTRmdiyx50LMQK7TP+Cff1sTemYwvgi4TEB7ktM+2AYwYgsQFaW1NZkifctrBJnyqOaUieqGEZiSRxoZ9Upqzw+l044i/QxxQ43mwYiLwA2T8qW4AOxwmdXfyc0Ndh1tNwkAke8GAQMkPkIkOti6KCbAkE=
+    app: household-challenge-react
+
+after_deploy:
+  # change settings in Procfile for client
+  # web: node src/server/index.js
+  # web: node server.js
+  - bash ./procfile_upd.sh
