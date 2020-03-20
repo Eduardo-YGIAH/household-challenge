@@ -25,6 +25,38 @@ exports.create_household = async (req, res) => {
   }
 };
 
+exports.get_household_suggestions = async (req, res) => {
+  try {
+    const households = await Household.find({});
+    console.log(households);
+    if (!households) {
+      res.status(404).send();
+    }
+    const householdNames = households.map(household => {
+      return household.title;
+    });
+    console.log(householdNames);
+    res.json(householdNames);
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
+};
+
+exports.join_household_from_name = async (req, res) => {
+  try {
+    await Household.findOneAndUpdate({ title: req.params.name }, { $push: { members: req.user._id } });
+    const household = await Household.findOne({ title: req.params.name });
+    await User.findOneAndUpdate({ _id: req.user._id }, { $push: { isMemberOf: household._id } });
+    const user = await User.findOne({ _id: req.user._id });
+    const token = req.token;
+    res.send({ user, token });
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+};
+
 exports.get_household = async (req, res) => {
   try {
     const household = await Household.findOne({ owner: req.user._id });
