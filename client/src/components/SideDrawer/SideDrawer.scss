@@ -1,0 +1,52 @@
+.side-drawer {
+  height: 100vh;
+  width: 70%;
+  background: #5d4954;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  transform: translateX(-100%);
+  transition: transform 0.5s ease-in-out;
+}
+
+.open {
+  transform: translateX(0);
+}
+
+.side-drawer-items {
+  width: 100%;
+  height: 70%;
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.side-drawer-link {
+  color: white;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: 400;
+  font-size: 1.2rem;
+  text-decoration: none;
+  position: relative;
+}
+
+a.side-drawer-link:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background: #ff9800;
+  width: 100%;
+  height: 2px;
+  transform: scale(0, 1);
+  transition: transform 0.2s ease-in-out;
+}
+
+a.side-drawer-link:hover::after,
+a.side-drawer-link:focus::after {
+  transform: scale(1, 1);
+}

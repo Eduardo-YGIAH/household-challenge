@@ -2,8 +2,9 @@ import React, { useContext } from 'react';
 import { Link } from '@reach/router';
 import './Nav.scss';
 import { UserContext } from '../context/UserContext';
+import DrawerToggleButton from './SideDrawer/DrawerToggleButton';
 
-export default function Nav() {
+export default function Nav(props) {
   const { user } = useContext(UserContext);
   React.useEffect(() => {
     return;
@@ -13,10 +14,8 @@ export default function Nav() {
     return (
       <div className='nav-container'>
         <div className='nav-container-links'>
-          <div className='burger'>
-            <div className='burger-line1'></div>
-            <div className='burger-line2'></div>
-            <div className='burger-line3'></div>
+          <div className='drawer-toggle-button__container'>
+            <DrawerToggleButton click={props.drawerClickHandler} />
           </div>
           <div className='avatar'>
             <Link to='/profile'>
