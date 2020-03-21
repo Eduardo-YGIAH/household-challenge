@@ -1,3 +1,3 @@
 rm Procfile
 touch Procfile
-echo 'web: npm start --prefix client' > Procfile
+echo 'web: node client/build/index.html' > Procfile

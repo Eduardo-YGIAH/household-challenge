@@ -14,25 +14,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(express.static(`${__dirname}/dist`));
-// app.use(express.static(path.join(__dirname, 'public')));
-
-const forceSSL = function() {
-  return function(req, res, next) {
-    if (req.headers['x-forwarded-proto'] !== 'https') {
-      return res.redirect(['https://', req.get('Host'), req.url].join(''));
-    }
-    next();
-  };
-};
-
-// For all GET requests, send back index.html so that PathLocationStrategy can be used
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/dist/index.html'));
-});
-
-// Instruct the app to use the forceSSL middleware
-app.use(forceSSL());
+app.use(express.static(`${__dirname}/build`));
 
 connection.once('open', () => {
   console.log('MoongDB database connection established successfully.');
@@ -50,5 +32,9 @@ app.use('/api', householdRouter);
 app.use('/api', challengeRouter);
 app.use('/api', taskRouter);
 app.use('/api', inviteRouter);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(`${__dirname}/client/build`));
+}
 
 module.exports = app;
