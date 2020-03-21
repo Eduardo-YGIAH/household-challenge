@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-const { challengeSchema } = require('./Challenge');
-
 const Schema = mongoose.Schema;
 
 let householdSchema = new Schema(
@@ -14,13 +12,25 @@ let householdSchema = new Schema(
     owner: {
       type: mongoose.Types.ObjectId,
       ref: 'User',
+      required: true,
+      autopopulate: false,
     },
-    challenges: [challengeSchema],
+    challenges: {
+      type: [
+        {
+          type: mongoose.Types.ObjectId,
+          ref: 'Challenge',
+          autopopulate: true,
+        },
+      ],
+      default: [],
+    },
     members: {
       type: [
         {
           type: mongoose.Types.ObjectId,
           ref: 'User',
+          autopopulate: false,
         },
       ],
       default: [],
@@ -30,6 +40,8 @@ let householdSchema = new Schema(
     timestamps: true,
   },
 );
+
+householdSchema.plugin(require('mongoose-autopopulate'));
 
 const Household = mongoose.model('Household', householdSchema);
 

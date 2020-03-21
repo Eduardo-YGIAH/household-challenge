@@ -3,10 +3,8 @@ const User = require('../models/User.js');
 
 exports.create_household = async (req, res) => {
   try {
-    const household = new Household({
-      ...req.body,
-      owner: req.user._id,
-    });
+    const { title, owner } = req.body.isOwner[0];
+    const household = new Household({ title, owner });
     await household.save();
     const user = await User.findById({ _id: req.user.id });
     user.isOwner.push(household._id);
@@ -22,7 +20,58 @@ exports.create_household = async (req, res) => {
         }
       });
   } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+};
+
+exports.get_household_suggestions = async (req, res) => {
+  try {
+    const households = await Household.find({});
+    console.log(households);
+    if (!households) {
+      res.status(404).send();
+    }
+    const householdNames = households.map(household => {
+      return household.title;
+    });
+    console.log(householdNames);
+    res.json(householdNames);
+  } catch (error) {
+    console.log(error);
     res.send(error);
+  }
+};
+
+exports.join_household_from_name = async (req, res) => {
+  try {
+    await Household.findOneAndUpdate({ title: req.params.name }, { $push: { members: req.user._id } });
+    const household = await Household.findOne({ title: req.params.name });
+    await User.findOneAndUpdate({ _id: req.user._id }, { $push: { isMemberOf: household._id } });
+    const user = await User.findOne({ _id: req.user._id });
+    const token = req.token;
+    res.send({ user, token });
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+};
+
+exports.get_members_list = async (req, res) => {
+  try {
+    console.log(req.params);
+    await Household.find({ _id: req.params.id })
+      .populate('members')
+      .exec(function(err, members) {
+        if (err) {
+          console.log('Error in exec', err);
+        }
+        console.log(members);
+        res.send(members);
+      });
+  } catch (err) {
+    console.log('from catch', err);
+    res.send(err);
   }
 };
 

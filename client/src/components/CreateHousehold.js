@@ -20,11 +20,14 @@ export default function CreateHousehold() {
         const options = {
           headers: { Authorization: `Bearer ${user.token}` },
         };
+        const payload = {
+          isOwner: [{ title: values.values.title, owner: user._id, challenges: [] }],
+        };
         axios
-          .post('/api/household', { title: values.values.title }, options)
+          .post('/api/household', payload, options)
           .then(res => {
+            console.log('Good', res.data.user);
             if (res.status === 201) {
-              console.log('Good', res.data.user);
               const token = res.data.token;
               const userObj = {
                 isAuthenticated: true,

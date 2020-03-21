@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 
 const mail = (email, cb) => {
   const mailInfo = {
-    from: '"Household Owner" <no-reply@test.com',
+    from: '"Household Owner" <no-reply@test.com>',
     to: email,
     subject: '*** Household Invitation ***',
     text: `Come and join our household!`

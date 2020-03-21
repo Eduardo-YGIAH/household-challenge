@@ -30,9 +30,7 @@ export default function CreateChallenge() {
     label: 'Create Challenge And Add Tasks',
 
     onclick: () => {
-      const payload = state[0];
-      console.log(payload);
-      if (payload.startDate < Date.now()) {
+      if (state[0].startDate < Date.now()) {
         let errors = {};
         errors.past = "You can't set a challenge to be in the past";
         alert(errors.past);
@@ -42,10 +40,16 @@ export default function CreateChallenge() {
       const options = {
         headers: { Authorization: `Bearer ${user.token}` },
       };
+      const { startDate, endDate } = state[0];
+      const payload = {
+        startDate,
+        endDate,
+      };
+
       Axios.post('/api/challenge', payload, options)
         .then(res => {
+          console.log('Good', res.data.user);
           if (res.status === 201) {
-            console.log('Good', res.data.user);
             const token = res.data.token;
             const userObj = {
               isAuthenticated: true,

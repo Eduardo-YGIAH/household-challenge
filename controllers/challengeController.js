@@ -1,4 +1,4 @@
-const { Challenge } = require('../models/Challenge.js');
+const Challenge = require('../models/Challenge.js');
 const User = require('../models/User.js');
 const Household = require('../models/Household');
 
@@ -9,12 +9,11 @@ exports.create_challenge = async (req, res) => {
     await challenge.save();
     const household = await Household.findByIdAndUpdate(
       { _id: req.user.isOwner[0]._id },
-      { $push: { challenges: challenge } },
+      { $push: { challenges: challenge._id } },
     );
     await household.save();
-    // await User.replaceOne({ _id: req.user._id }, { isOwner: household });
     const user = await User.findById({ _id: req.user._id });
-    // await user.save();
+    console.log('HOUSEHOLD SAVED WITH CHALLENGE ID', household);
     const token = req.token;
     res.status(201).send({ user, token });
   } catch (err) {

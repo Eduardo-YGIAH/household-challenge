@@ -14,7 +14,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(`${__dirname}/build`));
 
 connection.once('open', () => {
   console.log('MoongDB database connection established successfully.');
@@ -32,5 +32,9 @@ app.use('/api', householdRouter);
 app.use('/api', challengeRouter);
 app.use('/api', taskRouter);
 app.use('/api', inviteRouter);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(`${__dirname}/client/build`));
+}
 
 module.exports = app;

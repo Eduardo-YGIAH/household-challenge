@@ -2,13 +2,20 @@
   "name": "project3",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "12.13.1",
+    "npm": "6.13.7"
+  },
   "main": "./bin/www",
   "scripts": {
-    "client-install": "cd client && npm install",
     "start": "node bin/www",
-    "server": "nodemon bin/www",
+    "server": "nodemon ./bin/www",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "cd client && npm install && npm run prod && npm test && cd .. && npm install && LOG_LEVEL=info mocha ./test --exit",
+    "client-install": "cd client && npm install",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "npm run client-install && npm run build"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

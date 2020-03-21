@@ -73,7 +73,6 @@ export default function Invite() {
     }
   });
 
-
   return (
     <div className='invite-form-container'> 
       <h1>Invite Members to </h1>

@@ -17,7 +17,7 @@ export default function Login() {
       if (user.isOwner.length > 0) {
         navigate('/members');
       } else if (user.isMemberOf.length > 0) {
-        navigate('/portfolio');
+        navigate('/member-welcome');
       } else {
         navigate('/welcome');
       }

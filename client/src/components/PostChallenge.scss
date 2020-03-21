@@ -1,0 +1,16 @@
+@import '../variables.scss';
+
+.list__item-task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0;
+  background: $primary-color;
+  border-radius: 4px;
+  padding: 6px 6px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.list__item-task-name {
+  color: white;
+  font-weight: bold;
+}
