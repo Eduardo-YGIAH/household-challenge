@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { HouseholdContextProvider } from '../context/HouseholdContext';
 import { Router } from '@reach/router';
 import './Body.scss';
 import Nav from './Nav';
+import SideDrawer from './SideDrawer/SideDrawer';
+import Backdrop from './Backdrop';
 import Main from './Main';
 import About from './About';
 import Login from './Login';
@@ -20,9 +22,27 @@ import JoinHousehold from './JoinHousehold';
 import MemberWelcome from './MemberWelcome';
 
 export default function Body() {
+  const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
+  // let sideDrawer;
+  let backdrop;
+
+  const drawerToggleClickHandler = () => {
+    setSideDrawerOpen(prevState => !prevState.sideDrawerOpen);
+  };
+
+  const sideDrawerClose = () => {
+    setSideDrawerOpen(false);
+  };
+
+  if (sideDrawerOpen) {
+    // sideDrawer = <SideDrawer show={sideDrawerOpen} />;
+    backdrop = <Backdrop click={sideDrawerClose} />;
+  }
   return (
     <div className='body-container'>
-      <Nav />
+      <Nav drawerClickHandler={drawerToggleClickHandler} />
+      <SideDrawer show={sideDrawerOpen} close={sideDrawerClose} />
+      {backdrop}
       <HouseholdContextProvider>
         <div className='scroll'>
           <Router>
