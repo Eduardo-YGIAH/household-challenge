@@ -1,19 +1,15 @@
-const { sendMail } = require('../config/mail');
+require('dotenv').config();
+const mail = require('../config/mail');
 
-
-// import express and sendMail function
-/*-------------------------------------*/
-exports.send_invitation = async (req, res, next) => {
-  try{
-    await sendMail(
-      req.body.email,
-      'no-reply@test.com',
-      '** Household Invite **',
-      req.body.message
-    );
-    res.send('email sent! :)');
-  } catch(error){
-    console.log(error);
-    res.status(500);
-  }
-};
+exports.send_invite = (req, res, next) => {
+  console.log(req.body)
+  const { email, name } = req.body;
+  mail(email, name, function(err, data) {
+    if(err) {
+      console.log(error);
+      res.status(500).json({ message: 'Internal Error' })
+    } else {
+      res.json({ message: 'Message recieved!!!' })
+    }
+  });
+}

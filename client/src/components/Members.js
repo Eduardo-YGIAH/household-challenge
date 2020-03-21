@@ -21,7 +21,7 @@ export default function Members() {
 
   const btnInvite = {
     label: 'Invite Member',
-    link: '#',
+    link: '/invite-members',
     onclick: () => {},
     style: 'secondary',
   };
