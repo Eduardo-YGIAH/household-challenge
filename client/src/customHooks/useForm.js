@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const useForm = ({ initialValues, onSubmit, validate }) => {
   const [values, setValues] = React.useState(initialValues || {});
   const [touchedValues, setTouchedValues] = React.useState({});
   const [errors, setErrors] = React.useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = event => {
     const target = event.target;
@@ -37,6 +38,7 @@ const useForm = ({ initialValues, onSubmit, validate }) => {
       ...e,
     });
     onSubmit({ values, e });
+    setIsSubmitting(true);
   };
 
   return {
@@ -46,6 +48,7 @@ const useForm = ({ initialValues, onSubmit, validate }) => {
     handleChange,
     handleSubmit,
     handleBlur,
+    isSubmitting
   };
 };
 
