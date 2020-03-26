@@ -9,19 +9,24 @@ export default function Login() {
   const { user, setUser } = useContext(UserContext);
 
   React.useEffect(() => {
-    if (!user.isAuthenticated && auth.isAuthenticated()) {
-      const persistUser = auth.isAuthenticated();
-      setUser(persistUser);
-    }
-    if (user.isAuthenticated) {
-      if (user.isOwner.length > 0) {
-        navigate('/members');
-      } else if (user.isMemberOf.length > 0) {
-        navigate('/member-welcome');
-      } else {
-        navigate('/welcome');
+    function checkAuth() {
+      if (!user.isAuthenticated && auth.isAuthenticated()) {
+        const persistUser = auth.isAuthenticated();
+        setUser(prevUser => {
+          return { ...prevUser, ...persistUser };
+        });
+      }
+      if (user.isAuthenticated) {
+        if (user.isOwner.length > 0) {
+          navigate('/members');
+        } else if (user.isMemberOf.length > 0) {
+          navigate('/member-welcome');
+        } else {
+          navigate('/welcome');
+        }
       }
     }
+    checkAuth();
   });
 
   const login = async () => {
@@ -78,11 +83,24 @@ export default function Login() {
       <form onSubmit={handleSubmit} className='signup-form'>
         <div className='signup-form-group'>
           <label>Email Address</label>
-          <input type='email' name='email' onChange={handleInputChange} value={inputs.email} required />
+          <input
+            type='email'
+            name='email'
+            autoComplete='username'
+            onChange={handleInputChange}
+            value={inputs.email}
+            required
+          />
         </div>
         <div className='signup-form-group'>
           <label>Password</label>
-          <input type='password' name='password' onChange={handleInputChange} value={inputs.password} />
+          <input
+            type='password'
+            name='password'
+            autoComplete='current-password'
+            onChange={handleInputChange}
+            value={inputs.password}
+          />
         </div>
         <button className='btn' type='submit'>
           Login
