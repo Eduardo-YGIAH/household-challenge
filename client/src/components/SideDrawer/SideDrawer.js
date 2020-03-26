@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from '@reach/router';
+import Button from '../Button';
+import { UserContext } from '../../context/UserContext';
 import './SideDrawer.scss';
 
 export default function SideDrawer(props) {
+  const { logout } = useContext(UserContext);
   let drawerClasses = 'side-drawer';
   if (props.show) {
     drawerClasses = 'side-drawer open';
   }
+  const btnLogout = {
+    label: 'Logout',
+    link: null,
+    style: 'small-danger',
+    onclick: logout,
+  };
   return (
     <nav className={drawerClasses} onClick={props.close}>
       <div className='side-drawer-items'>
@@ -40,6 +49,7 @@ export default function SideDrawer(props) {
         <Link className='side-drawer-link' to='/join-household'>
           Join a Household
         </Link>
+        <Button btn={btnLogout} />
       </div>
     </nav>
   );

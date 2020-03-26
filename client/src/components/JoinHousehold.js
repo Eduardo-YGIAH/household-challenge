@@ -1,57 +1,73 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from '../context/UserContext';
 import * as auth from '../helperFunctions/auth';
 import { navigate } from '@reach/router';
 import Autocomplete from './Autocomplete';
 import Button from './Button';
-import Axios from 'axios';
+import Axios from '../helperFunctions/axios.config';
 
 export default function JoinHousehold() {
   const { user, setUser } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [value, setValue] = useState('');
-  const controller = new AbortController();
 
-  React.useEffect(() => {
-    if (!user.isAuthenticated && !auth.isAuthenticated()) {
-      navigate('/login');
+  useEffect(() => {
+    console.log('rendering Auth useEffect on Join Household');
+    function checkAuth() {
+      if (!user.isAuthenticated && !auth.isAuthenticated()) {
+        navigate('/login');
+      }
+      if (!user.isAuthenticated && auth.isAuthenticated()) {
+        const persistUser = auth.isAuthenticated();
+        setUser(prevUser => {
+          return { ...prevUser, ...persistUser };
+        });
+      }
+      if (user.isAuthenticated) {
+        if (user.isMemberOf.length > 0) {
+          navigate('/member-welcome');
+        }
+        if (user.isOwner.length > 0) {
+          navigate('/members');
+        }
+      }
     }
+    checkAuth();
+  });
 
-    if (!user.isAuthenticated && auth.isAuthenticated()) {
-      const persistUser = auth.isAuthenticated();
-      setUser(persistUser);
-    }
-
-    fetchData();
-
-    controller.abort();
-  }, []);
-
-  const userLocal = JSON.parse(localStorage.getItem('userObj'));
-  const token = userLocal.token;
-  const options = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
-  const fetchData = async () => {
-    try {
-      setIsLoading(true);
-      let res = await fetch('/api/household-suggestions', options);
-      if (res.status === 200) {
-        let data = await res.json();
-        if (Array.isArray(data)) {
-          setSuggestions(data);
-          setIsLoading(false);
+  useEffect(() => {
+    const abortController = new AbortController();
+    console.log('Rendering Suggestions fetcher useEffect');
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        let res = await fetch('/api/household-suggestions', {
+          signal: abortController.signal,
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+        if (res.status === 200) {
+          let data = await res.json();
+          if (Array.isArray(data)) {
+            setSuggestions(data);
+            setIsLoading(false);
+          } else {
+            console.log(res);
+          }
         } else {
           console.log(res);
         }
-      } else {
-        console.log(res);
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    };
+    if (user.isAuthenticated) {
+      fetchData();
     }
-  };
+    return () => {
+      abortController.abort();
+    };
+  }, [user.token, user.isAuthenticated]);
 
   if (isLoading) {
     return <h2>Loading...</h2>;
@@ -60,8 +76,8 @@ export default function JoinHousehold() {
     setValue(selectedValue);
   }
 
-  const joinHouseholdByName = function(name, options) {
-    Axios.put(`/api/household/${name}`, {}, options)
+  const joinHouseholdByName = function(name) {
+    Axios.put(`/api/household/${name}`)
       .then(res => {
         if (res.status === 200) {
           const token = res.data.token;
@@ -86,7 +102,7 @@ export default function JoinHousehold() {
   const btnSendRequest = {
     label: 'Join',
     onclick: () => {
-      joinHouseholdByName(value, options);
+      joinHouseholdByName(value);
     },
     style: '',
   };
